@@ -18,17 +18,23 @@ import asyncio
 
 from app.core.config import settings
 from app.core.model_loader import ModelLoader
-from app.routers import trades, stats, websocket, data_sources, leaderboard_ws
+from app.routers import trades, stats, websocket, data_sources, blockchain
+from app.blockchain.config import blockchain_settings
+from app.blockchain.client import blockchain_client
 
 # ─────────────────────────────────────────────────
 #  LIFESPAN  (startup / shutdown)
 # ─────────────────────────────────────────────────
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Load ML models at startup."""
+    """Load ML models and initialize blockchain client if enabled at startup."""
     print("🚀 Loading ML models ...")
     ModelLoader.load()
-    print("✅ Models loaded. Server ready.")
+    print("✅ Models loaded.")
+    if blockchain_settings.BLOCKCHAIN_ENABLED:
+        print("🔗 Initializing blockchain client ...")
+        blockchain_client.initialize()
+    print("⚡ Server ready.")
     yield
     print("🛑 Shutting down ...")
 
@@ -57,6 +63,7 @@ app.add_middleware(
 app.include_router(trades.router,        prefix="/api", tags=["Trades"])
 app.include_router(stats.router,         prefix="/api", tags=["Stats"])
 app.include_router(data_sources.router,  prefix="/api", tags=["Data Sources"])
+app.include_router(blockchain.router,    prefix="/api", tags=["Blockchain"])
 app.include_router(websocket.router,     tags=["WebSocket"])
 app.include_router(leaderboard_ws.router, tags=["Leaderboard"])
 
