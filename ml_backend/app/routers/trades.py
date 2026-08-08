@@ -24,13 +24,15 @@ def predict_trade(trade: TradeInput, background_tasks: BackgroundTasks):
     result = predict_single(trade.model_dump())
     result["trade_id"] = trade.trade_id
 
-    # If blockchain is enabled and trade is flagged as high-risk, record on-chain asynchronously
-    if blockchain_settings.BLOCKCHAIN_ENABLED and (result.get("is_flagged") or result.get("severity") in ("High", "Critical")):
+    # If blockchain is enabled and risk_score > threshold, record on-chain asynchronously
+    risk_score = result.get("risk_score", 0.0)
+    threshold = blockchain_settings.BLOCKCHAIN_RISK_THRESHOLD
+    if blockchain_settings.BLOCKCHAIN_ENABLED and risk_score > threshold:
         background_tasks.add_task(
             blockchain_service.record_alert,
             trade.trade_id or "TRD_UNKNOWN",
             trade.trader_id or "TRD_UNKNOWN",
-            result.get("risk_score", 0.0),
+            risk_score,
             result.get("severity", "Medium"),
             result.get("shap_explanations"),
         )
@@ -43,7 +45,7 @@ def predict_trades_batch(batch: BatchTradeInput, background_tasks: BackgroundTas
     """
     Efficient batch prediction for up to 1000 trades at once.
     Returns risk scores without per-trade SHAP (use /predict for SHAP).
-    Asynchronously records high-risk batch alerts on-chain if BLOCKCHAIN_ENABLED=true.
+    Asynchronously records high-risk batch alerts on-chain if BLOCKCHAIN_ENABLED=true and risk_score > threshold.
     """
     if not ModelLoader.is_loaded():
         raise HTTPException(status_code=503, detail="Models not loaded yet")
@@ -56,13 +58,15 @@ def predict_trades_batch(batch: BatchTradeInput, background_tasks: BackgroundTas
     flagged     = sum(1 for r in results if r.get("is_flagged"))
 
     if blockchain_settings.BLOCKCHAIN_ENABLED:
+        threshold = blockchain_settings.BLOCKCHAIN_RISK_THRESHOLD
         for res in results:
-            if res.get("is_flagged") or res.get("severity") in ("High", "Critical"):
+            r_score = res.get("risk_score", 0.0)
+            if r_score > threshold:
                 background_tasks.add_task(
                     blockchain_service.record_alert,
                     res.get("trade_id") or "TRD_UNKNOWN",
                     res.get("trader_id") or "TRD_UNKNOWN",
-                    res.get("risk_score", 0.0),
+                    r_score,
                     res.get("severity", "Medium"),
                 )
 

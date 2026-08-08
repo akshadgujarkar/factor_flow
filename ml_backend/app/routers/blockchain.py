@@ -46,6 +46,15 @@ def get_blockchain_status():
     }
 
 
+@router.get("/blockchain/alerts", summary="Get all recorded on-chain alerts")
+def get_all_on_chain_alerts():
+    if not blockchain_settings.BLOCKCHAIN_ENABLED:
+        raise HTTPException(status_code=400, detail="Blockchain integration is disabled")
+
+    alerts = blockchain_service.get_all_alerts()
+    return {"alerts": alerts, "count": len(alerts)}
+
+
 @router.post("/blockchain/alerts", summary="Record trade alert on-chain manually")
 def record_alert_on_chain(payload: ManualRecordAlertInput, background_tasks: BackgroundTasks):
     if not blockchain_settings.BLOCKCHAIN_ENABLED:

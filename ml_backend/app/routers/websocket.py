@@ -17,6 +17,8 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from app.core.config import settings
 from app.services.predictor import predict_batch
 from app.core.leaderboard import LeaderboardManager
+from app.blockchain.config import blockchain_settings
+from app.blockchain.service import blockchain_service
 
 router = APIRouter()
 
@@ -102,6 +104,22 @@ async def live_feed(websocket: WebSocket):
 
                 # Feed scored trade into the leaderboard (non-blocking)
                 asyncio.create_task(LeaderboardManager.ingest(msg))
+
+                # Auto-record high-risk trades on blockchain if risk_score > threshold
+                r_score = float(msg.get("risk_score") or 0.0)
+                if blockchain_settings.BLOCKCHAIN_ENABLED and r_score > blockchain_settings.BLOCKCHAIN_RISK_THRESHOLD:
+                    trade_id = str(msg.get("trade_id") or f"TRD-{Date.now()}")
+                    trader_id = str(msg.get("trader_id") or "UNKNOWN")
+                    severity = str(msg.get("severity") or "Medium")
+                    asyncio.create_task(
+                        asyncio.to_thread(
+                            blockchain_service.record_alert,
+                            trade_id,
+                            trader_id,
+                            r_score,
+                            severity,
+                        )
+                    )
 
                 await asyncio.sleep(settings.WS_INTERVAL)
 

@@ -249,5 +249,107 @@ class TestServiceWithMockedClient(unittest.TestCase):
             self.assertIn("trade_id", result["reason"].lower())
 
 
+class TestRiskThresholdAndIdempotency(unittest.TestCase):
+    """Verify exact risk score threshold rules (risk_score > 85)."""
+
+    def setUp(self):
+        self.service = FactorFlowBlockchainService()
+
+    def test_risk_score_84_not_submitted(self):
+        """riskScore = 84 -> Must NOT be recorded on blockchain."""
+        with patch("app.blockchain.service.blockchain_settings") as mock_cfg:
+            mock_cfg.BLOCKCHAIN_ENABLED = True
+            mock_cfg.BLOCKCHAIN_RISK_THRESHOLD = 85.0
+            result = self.service.record_alert("TRD-84", "TRD-007", 84.0, "High")
+            self.assertFalse(result["success"])
+            self.assertEqual(result.get("status"), "Not Required")
+
+    def test_risk_score_85_not_submitted(self):
+        """riskScore = 85 -> Must NOT be recorded on blockchain (strictly > 85)."""
+        with patch("app.blockchain.service.blockchain_settings") as mock_cfg:
+            mock_cfg.BLOCKCHAIN_ENABLED = True
+            mock_cfg.BLOCKCHAIN_RISK_THRESHOLD = 85.0
+            result = self.service.record_alert("TRD-85", "TRD-007", 85.0, "Critical")
+            self.assertFalse(result["success"])
+            self.assertEqual(result.get("status"), "Not Required")
+
+    def test_risk_score_86_submitted(self):
+        """riskScore = 86 -> Must be submitted to blockchain."""
+        contract = MagicMock()
+        contract.functions.getAlert.side_effect = Exception("Not found")
+        self.service._contract_instance = contract
+
+        with patch("app.blockchain.service.blockchain_settings") as mock_cfg:
+            mock_cfg.BLOCKCHAIN_ENABLED = True
+            mock_cfg.BLOCKCHAIN_RISK_THRESHOLD = 85.0
+            mock_cfg.FACTORFLOW_CONTRACT_ADDRESS = "0x1234567890123456789012345678901234567890"
+            with patch("app.blockchain.service.blockchain_client") as mock_client:
+                mock_client.is_connected.return_value = True
+                mock_client.send_transaction.return_value = {
+                    "status": "success",
+                    "transaction_hash": "0x123456789abcdef",
+                    "block_number": 100,
+                }
+
+                result = self.service.record_alert("TRD-86", "TRD-007", 86.0, "Critical")
+                self.assertTrue(result["success"])
+                self.assertEqual(result.get("status"), "Confirmed")
+                self.assertEqual(result.get("transaction_hash"), "0x123456789abcdef")
+
+    def test_risk_score_100_submitted(self):
+        """riskScore = 100 -> Must be submitted to blockchain."""
+        contract = MagicMock()
+        contract.functions.getAlert.side_effect = Exception("Not found")
+        self.service._contract_instance = contract
+
+        with patch("app.blockchain.service.blockchain_settings") as mock_cfg:
+            mock_cfg.BLOCKCHAIN_ENABLED = True
+            mock_cfg.BLOCKCHAIN_RISK_THRESHOLD = 85.0
+            mock_cfg.FACTORFLOW_CONTRACT_ADDRESS = "0x1234567890123456789012345678901234567890"
+            with patch("app.blockchain.service.blockchain_client") as mock_client:
+                mock_client.is_connected.return_value = True
+                mock_client.send_transaction.return_value = {
+                    "status": "success",
+                    "transaction_hash": "0x100hash",
+                    "block_number": 101,
+                }
+
+                result = self.service.record_alert("TRD-100", "TRD-007", 100.0, "Critical")
+                self.assertTrue(result["success"])
+                self.assertEqual(result.get("status"), "Confirmed")
+
+    def test_rpc_failure_graceful_handling(self):
+        """If RPC is unavailable, record_alert logs failure safely without throwing."""
+        contract = MagicMock()
+        contract.functions.getAlert.side_effect = Exception("Not found")
+        self.service._contract_instance = contract
+
+        with patch("app.blockchain.service.blockchain_settings") as mock_cfg:
+            mock_cfg.BLOCKCHAIN_ENABLED = True
+            mock_cfg.BLOCKCHAIN_RISK_THRESHOLD = 85.0
+            mock_cfg.FACTORFLOW_CONTRACT_ADDRESS = "0x1234567890123456789012345678901234567890"
+            with patch("app.blockchain.service.blockchain_client") as mock_client:
+                mock_client.is_connected.return_value = True
+                mock_client.send_transaction.side_effect = Exception("RPC Connection Refused")
+
+                result = self.service.record_alert("TRD-RPC-FAIL", "TRD-007", 92.0, "Critical")
+                self.assertFalse(result["success"])
+                self.assertEqual(result.get("status"), "Failed")
+                self.assertIn("failed", result.get("error").lower())
+
+    def test_duplicate_pending_submission_prevention(self):
+        """Concurrent or duplicate submission while pending is prevented."""
+        self.service._pending_trades.add("TRD-PENDING")
+
+        with patch("app.blockchain.service.blockchain_settings") as mock_cfg:
+            mock_cfg.BLOCKCHAIN_ENABLED = True
+            mock_cfg.BLOCKCHAIN_RISK_THRESHOLD = 85.0
+
+            result = self.service.record_alert("TRD-PENDING", "TRD-007", 90.0, "Critical")
+            self.assertTrue(result.get("already_pending"))
+            self.assertEqual(result.get("status"), "Pending")
+
+
 if __name__ == "__main__":
     unittest.main()
+

@@ -9,6 +9,7 @@ class BlockchainSettings(BaseSettings):
     BLOCKCHAIN_CHAIN_ID: int = 31337
     BLOCKCHAIN_TX_TIMEOUT: int = 60
     BLOCKCHAIN_CONFIRMATIONS: int = 1
+    BLOCKCHAIN_RISK_THRESHOLD: float = 85.0
 
     class Config:
         env_file = ".env"
