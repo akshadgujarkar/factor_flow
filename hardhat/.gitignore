@@ -1,0 +1,24 @@
+# Node dependencies
+node_modules/
+
+# Hardhat artifacts & cache
+artifacts/
+cache/
+typechain/
+typechain-types/
+
+# Coverage & test reports
+coverage/
+coverage.json
+.solcover.js
+gasReporterOutput.txt
+
+# Environment variables & private keys
+.env
+.env.*
+!.env.example
+
+# OS generated files
+.DS_Store
+Thumbs.db
+*.log

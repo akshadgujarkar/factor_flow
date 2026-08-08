@@ -1,0 +1,27 @@
+{
+  "name": "factorflow-hardhat",
+  "version": "1.0.0",
+  "description": "Hardhat Smart Contract Audit Ledger for FactorFlow Market Surveillance",
+  "main": "hardhat.config.js",
+  "type": "commonjs",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "node": "hardhat node",
+    "deploy": "hardhat run scripts/deploy.js",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost"
+  },
+  "keywords": [
+    "hardhat",
+    "ethereum",
+    "solidity",
+    "factorflow",
+    "blockchain-audit"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.29.0"
+  }
+}
