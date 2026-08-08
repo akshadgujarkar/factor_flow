@@ -15,6 +15,8 @@ import {
   Search,
   Settings,
   ShieldAlert,
+  Sun,
+  Moon,
   Users,
   Waypoints,
 } from "lucide-react";
@@ -38,7 +40,7 @@ const NAV = [
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const { user, hydrated, logout, alerts, live, setLive, blockchain } = useSentinel();
+  const { user, hydrated, logout, alerts, live, setLive, blockchain, theme, toggleTheme } = useSentinel();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
@@ -151,6 +153,25 @@ export function AppShell({ children }: { children: ReactNode }) {
           </label>
 
           <div className="ml-auto flex items-center gap-3">
+            <button
+              onClick={toggleTheme}
+              className="flex items-center gap-1.5 rounded border border-border bg-surface px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-elevated hover:text-foreground"
+              title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? (
+                <>
+                  <Sun className="h-3.5 w-3.5 text-amber-400" />
+                  <span className="hidden sm:inline font-mono text-[11px]">Light</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="h-3.5 w-3.5 text-indigo-500" />
+                  <span className="hidden sm:inline font-mono text-[11px]">Dark</span>
+                </>
+              )}
+            </button>
+
             <Chip tone="cyan">
               <Blocks className="h-3 w-3" /> Chain OK
             </Chip>

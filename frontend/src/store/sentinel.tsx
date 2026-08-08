@@ -48,6 +48,10 @@ interface SentinelState {
 
   anchorCase: (alert: Alert, reason?: string) => BlockchainRecord;
   updateAlert: (id: string, patch: Partial<Alert>) => void;
+
+  /** Theme state: dark or light */
+  theme: "dark" | "light";
+  toggleTheme: () => void;
 }
 
 const Ctx = createContext<SentinelState | null>(null);
@@ -65,6 +69,29 @@ function seedTimeline(): TimelinePoint[] {
 }
 
 export function SentinelProvider({ children }: { children: ReactNode }) {
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("theme");
+      if (saved === "light" || saved === "dark") return saved;
+    }
+    return "dark";
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === "light") {
+      root.classList.remove("dark");
+      root.classList.add("light");
+    } else {
+      root.classList.remove("light");
+      root.classList.add("dark");
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  }, []);
   const [hydrated, setHydrated] = useState(false);
   const [user, setUser] = useState<AuthUser | null>(null);
   const [live, setLive] = useState(true);
@@ -351,6 +378,8 @@ export function SentinelProvider({ children }: { children: ReactNode }) {
       lastLeaderboardEvent,
       anchorCase,
       updateAlert,
+      theme,
+      toggleTheme,
     }),
     [
       hydrated,
@@ -368,6 +397,8 @@ export function SentinelProvider({ children }: { children: ReactNode }) {
       lastLeaderboardEvent,
       anchorCase,
       updateAlert,
+      theme,
+      toggleTheme,
     ],
   );
 
