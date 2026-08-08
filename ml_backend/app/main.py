@@ -18,7 +18,7 @@ import asyncio
 
 from app.core.config import settings
 from app.core.model_loader import ModelLoader
-from app.routers import trades, stats, websocket, data_sources, blockchain
+from app.routers import trades, stats, websocket, data_sources, blockchain, leaderboard_ws
 from app.blockchain.config import blockchain_settings
 from app.blockchain.client import blockchain_client
 
