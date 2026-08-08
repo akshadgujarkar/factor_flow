@@ -32,10 +32,11 @@ export const Route = createFileRoute("/explainability")({
 
 function XaiPage() {
   const { alert: alertId } = Route.useSearch();
-  const { alerts, live } = useSentinel();
+  const { alerts, leaderboard, live } = useSentinel();
 
-  const sorted = [...alerts].sort((a, b) => b.risk_score - a.risk_score);
-  const alert = alerts.find((a) => a.alert_id === alertId) ?? sorted[0];
+  const allAlerts = [...alerts, ...leaderboard];
+  const sorted = [...allAlerts].sort((a, b) => b.risk_score - a.risk_score);
+  const alert = allAlerts.find((a) => a.alert_id === alertId) ?? sorted[0];
   const [reasons, setReasons] = useState<any[]>(alert?.top_reasons || []);
 
   useEffect(() => {
