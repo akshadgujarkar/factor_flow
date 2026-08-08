@@ -7,7 +7,7 @@ import { PageHeader, Panel, KeyValue } from "@/components/sentinel/states";
 import { FeatureImpactChart, RiskGauge } from "@/components/sentinel/FeatureImpactChart";
 import { NetworkGraph, InvestigationTimeline } from "@/components/sentinel/NetworkGraph";
 import { SeverityBadge, LiveDot } from "@/components/sentinel/badges";
-import { AnchorFraudDialog, AnchoredBadge } from "@/components/sentinel/blockchain";
+import { AnchoredBadge } from "@/components/sentinel/blockchain";
 import { useSentinel } from "@/store/sentinel";
 import { api } from "@/lib/api";
 
@@ -33,7 +33,6 @@ export const Route = createFileRoute("/explainability")({
 function XaiPage() {
   const { alert: alertId } = Route.useSearch();
   const { alerts, live } = useSentinel();
-  const [dialog, setDialog] = useState(false);
 
   const sorted = [...alerts].sort((a, b) => b.risk_score - a.risk_score);
   const alert = alerts.find((a) => a.alert_id === alertId) ?? sorted[0];
@@ -100,15 +99,8 @@ function XaiPage() {
                 />
               </div>
               <p className="text-xs leading-relaxed text-muted-foreground">{alert.reason}</p>
-              {alert.tx_hash ? (
+              {alert.tx_hash && (
                 <AnchoredBadge hash={alert.tx_hash} />
-              ) : (
-                <button
-                  onClick={() => setDialog(true)}
-                  className="flex w-full items-center justify-center gap-2 rounded bg-primary py-2 text-xs font-medium text-primary-foreground hover:opacity-90"
-                >
-                  <Blocks className="h-3.5 w-3.5" /> Anchor confirmed fraud
-                </button>
               )}
             </div>
           </Panel>
@@ -148,7 +140,6 @@ function XaiPage() {
         </div>
       </div>
 
-      <AnchorFraudDialog alert={alert} open={dialog} onOpenChange={setDialog} trigger="Explainable AI review" />
     </AppShell>
   );
 }

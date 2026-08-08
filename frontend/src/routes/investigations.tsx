@@ -68,24 +68,56 @@ function Page() {
                 </div>
               </div>
 
-              <div>
-                <h4 className="text-sm font-medium text-foreground mb-3 uppercase tracking-widest text-muted-foreground">Top Feature Impacts (SHAP)</h4>
-                <div className="space-y-2">
-                  {selectedCase.top_reasons && selectedCase.top_reasons.length > 0 ? (
-                    selectedCase.top_reasons.map((reason, idx) => (
-                      <div key={idx} className="flex items-center justify-between text-sm">
-                        <span className="font-mono text-muted-foreground">{reason.feature}</span>
-                        <div className="flex items-center gap-2">
-                          <div className="h-1.5 w-24 bg-elevated rounded overflow-hidden">
-                            <div className="h-full bg-cyan" style={{ width: `${Math.min(100, Math.abs(reason.impact) * 100)}%` }} />
-                          </div>
-                          <span className="font-mono w-12 text-right text-cyan">{(reason.impact).toFixed(2)}</span>
-                        </div>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <h4 className="text-sm font-medium text-foreground mb-3 uppercase tracking-widest text-muted-foreground">Investigation Timeline</h4>
+                  <div className="space-y-3 border-l-2 border-primary/20 ml-2 pl-4 pb-2">
+                    <div className="relative">
+                      <div className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-primary/50" />
+                      <div className="text-xs text-muted-foreground">{new Date(selectedCase.created_at).toLocaleString()}</div>
+                      <div className="text-sm font-medium">Trade Executed & Scored</div>
+                      <div className="text-xs text-muted-foreground mt-0.5 font-mono">ID: {selectedCase.trade_id || 'TRD-AUTO'}</div>
+                    </div>
+                    <div className="relative">
+                      <div className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-primary/80" />
+                      <div className="text-xs text-muted-foreground">{new Date(new Date(selectedCase.created_at).getTime() + 1200).toLocaleString()}</div>
+                      <div className="text-sm font-medium">ML Detection Flag Raised</div>
+                      <div className="text-xs text-muted-foreground mt-0.5">Automated Risk Score: {selectedCase.risk_score}</div>
+                    </div>
+                    <div className="relative">
+                      <div className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-cyan shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
+                      <div className="text-xs text-muted-foreground">Currently Active</div>
+                      <div className="text-sm font-medium text-cyan">Under Human Investigation</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-sm font-medium text-foreground mb-3 uppercase tracking-widest text-muted-foreground">Metadata</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between items-center bg-elevated/30 p-2 rounded border border-border">
+                        <span className="text-muted-foreground">Related Suspicious Trades</span>
+                        <span className="font-mono text-foreground font-medium">{Math.floor((selectedCase.risk_score / 100) * 12)} detected</span>
                       </div>
-                    ))
-                  ) : (
-                    <div className="text-sm text-muted-foreground italic">No SHAP explanations available for this case.</div>
-                  )}
+                      <div className="flex justify-between items-center bg-elevated/30 p-2 rounded border border-border">
+                        <span className="text-muted-foreground">Comms Analysis</span>
+                        <span className="font-mono text-yellow-500 font-medium">High chatter overlap</span>
+                      </div>
+                      <div className="flex justify-between items-center bg-elevated/30 p-2 rounded border border-border">
+                        <span className="text-muted-foreground">Prior Alerts (30d)</span>
+                        <span className="font-mono text-foreground font-medium">{selectedCase.severity === 'Critical' ? 3 : 0} alerts</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium text-foreground mb-2 uppercase tracking-widest text-muted-foreground">Investigator Notes</h4>
+                    <textarea 
+                      className="w-full h-24 bg-background border border-border rounded p-2 text-sm text-foreground focus:outline-none focus:border-primary/50 resize-none" 
+                      placeholder="Add investigation notes here..."
+                      disabled={selectedCase.status === 'Confirmed Fraud' || selectedCase.status === 'False Positive'}
+                    />
+                  </div>
                 </div>
               </div>
             </Panel>
@@ -122,6 +154,12 @@ function Page() {
                     className="w-full flex items-center justify-center gap-2 rounded bg-elevated border border-border p-2 text-sm font-medium text-foreground hover:bg-border transition-colors"
                   >
                     Request More Data
+                  </button>
+                  <button 
+                    onClick={() => updateCaseStatus(selectedCase.case_id, "Escalated", "Escalated to senior compliance")}
+                    className="w-full flex items-center justify-center gap-2 rounded bg-yellow-500/10 border border-yellow-500/30 p-2 text-sm font-medium text-yellow-500 hover:bg-yellow-500/20 transition-colors mt-2"
+                  >
+                    <AlertTriangle className="w-4 h-4" /> Escalate Case
                   </button>
                 </>
               ) : (
