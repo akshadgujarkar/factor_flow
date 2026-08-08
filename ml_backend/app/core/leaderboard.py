@@ -1,17 +1,17 @@
 """
-LeaderboardManager — in-memory Top-80 risk leaderboard.
+LeaderboardManager — in-memory Top-80 risk leaderboard of unique traders.
 
-Maintains a sorted list (descending risk_score) of at most LEADERBOARD_SIZE
-entries. Each call to `ingest()` scores a trade and returns a typed event
-dict that the WebSocket router can broadcast to all connected clients.
+Maintains a dictionary of all unique traders seen in the session and their
+highest risk_score. The top 80 traders are continuously computed and any 
+changes emit events.
 
 Events
 ------
   SNAPSHOT     — full board state (sent once on WS connect)
-  NEW_ENTRY    — a trade entered the leaderboard (pushed lowest out if full)
-  RANK_CHANGE  — an existing entry's rank moved (re-sort after score update)
-  SCORE_UPDATE — an existing entry got a new/higher score
-  REMOVED      — an entry was bumped off the bottom of the board
+  NEW_ENTRY    — a trader entered the top 80
+  RANK_CHANGE  — an existing entry's rank moved
+  SCORE_UPDATE — an existing entry got a higher score but rank didn't change
+  REMOVED      — an entry was bumped out of the top 80
 """
 
 import asyncio
@@ -22,8 +22,9 @@ LEADERBOARD_SIZE = 80
 
 class _Board:
     """Mutable singleton board state."""
-    entries: list[dict]  = []   # sorted descending by risk_score
-    _lock: asyncio.Lock | None  = None
+    trader_best: dict[str, dict] = {}  # trader_id -> best entry details
+    top_80: list[dict] = []            # sorted descending by risk_score
+    _lock: asyncio.Lock | None = None
     _subscribers: list[asyncio.Queue] = []
 
     @classmethod
@@ -33,41 +34,22 @@ class _Board:
         return cls._lock
 
 
-def _rank_of(board: list[dict], trader_id: str) -> int | None:
-    """Return 1-based rank of trader in board, or None if not present."""
-    for i, e in enumerate(board):
-        if e["trader_id"] == trader_id:
-            return i + 1
-    return None
-
-
-def _find_entry(board: list[dict], trader_id: str) -> tuple[int, dict] | tuple[None, None]:
-    for i, e in enumerate(board):
-        if e["trader_id"] == trader_id:
-            return i, e
-    return None, None
-
-
-def _sort_board(board: list[dict]) -> list[dict]:
-    return sorted(board, key=lambda e: e["risk_score"], reverse=True)
-
-
 class LeaderboardManager:
     """Static façade over _Board. All mutating calls are async (use the lock)."""
 
     @staticmethod
     def snapshot() -> list[dict]:
-        """Return a shallow copy of the current board with ranks attached."""
+        """Return a shallow copy of the current Top 80 with ranks attached."""
         return [
             {**e, "rank": i + 1}
-            for i, e in enumerate(_Board.entries)
+            for i, e in enumerate(_Board.top_80)
         ]
 
     @staticmethod
     async def ingest(scored_trade: dict[str, Any]) -> dict | None:
         """
-        Process one scored trade. Returns an event dict or None if the trade
-        doesn't qualify for the leaderboard.
+        Process one scored trade. Returns the primary event dict for the 
+        incoming trade, or None if it doesn't trigger an update to the Top 80.
         """
         async with _Board.lock():
             trader_id  = scored_trade.get("trader_id", "UNK")
@@ -76,70 +58,78 @@ class LeaderboardManager:
             # Build a clean leaderboard entry from the scored trade
             entry = _make_entry(scored_trade)
 
-            board = _Board.entries
-            idx, existing = _find_entry(board, trader_id)
+            # ── 1. Maintain highest risk score per trader ──────────
+            if trader_id in _Board.trader_best:
+                existing = _Board.trader_best[trader_id]
+                # If old score is higher, keep it, but update trade details
+                if existing["risk_score"] > risk_score:
+                    entry["risk_score"] = existing["risk_score"]
+                    entry["severity"] = existing["severity"]
+                    entry["fraud_probability"] = max(existing["fraud_probability"], entry["fraud_probability"])
+                    entry["anomaly_score"] = max(existing["anomaly_score"], entry["anomaly_score"])
+            
+            _Board.trader_best[trader_id] = entry
 
-            # ── Case 1: Trader already on the board ───────────────────────
-            if existing is not None:
-                prev_rank  = idx + 1
-                old_score  = existing["risk_score"]
-                board[idx] = entry
-                board[:]   = _sort_board(board)
-                new_rank   = _rank_of(board, trader_id)
+            # ── 2. Recompute Top 80 ────────────────────────────────
+            old_top_80 = _Board.top_80
+            old_ranks = {e["trader_id"]: i + 1 for i, e in enumerate(old_top_80)}
 
-                if new_rank != prev_rank:
-                    event = {
-                        "event"    : "RANK_CHANGE",
-                        "entry"    : {**entry, "rank": new_rank},
-                        "rank"     : new_rank,
-                        "prev_rank": prev_rank,
-                    }
+            all_entries = list(_Board.trader_best.values())
+            all_entries.sort(key=lambda e: e["risk_score"], reverse=True)
+            
+            new_top_80 = all_entries[:LEADERBOARD_SIZE]
+            _Board.top_80 = new_top_80
+            new_ranks = {e["trader_id"]: i + 1 for i, e in enumerate(new_top_80)}
+
+            events = []
+
+            # ── 3. Check what happened to the incoming trader ──────
+            if trader_id in new_ranks:
+                new_rank = new_ranks[trader_id]
+                updated_entry = {**entry, "rank": new_rank}
+
+                if trader_id not in old_ranks:
+                    events.append({
+                        "event": "NEW_ENTRY",
+                        "entry": updated_entry,
+                        "rank": new_rank
+                    })
                 else:
-                    event = {
-                        "event": "SCORE_UPDATE",
-                        "entry": {**entry, "rank": new_rank},
-                        "rank" : new_rank,
-                    }
-                await _publish(event)
-                return event
+                    prev_rank = old_ranks[trader_id]
+                    # Only emit an event if rank changed or score actually increased
+                    if new_rank != prev_rank:
+                        events.append({
+                            "event": "RANK_CHANGE",
+                            "entry": updated_entry,
+                            "rank": new_rank,
+                            "prev_rank": prev_rank
+                        })
+                    else:
+                        # Even if score didn't change mathematically, we emit SCORE_UPDATE
+                        # so the frontend flashes and shows the latest trade ID
+                        events.append({
+                            "event": "SCORE_UPDATE",
+                            "entry": updated_entry,
+                            "rank": new_rank
+                        })
 
-            # ── Case 2: Board not full yet ────────────────────────────────
-            if len(board) < LEADERBOARD_SIZE:
-                board.append(entry)
-                board[:] = _sort_board(board)
-                new_rank  = _rank_of(board, trader_id)
-                event = {
-                    "event": "NEW_ENTRY",
-                    "entry": {**entry, "rank": new_rank},
-                    "rank" : new_rank,
-                }
-                await _publish(event)
-                return event
+            # ── 4. Check for removed traders ───────────────────────
+            for old_trader_id, old_rank in old_ranks.items():
+                if old_trader_id not in new_ranks:
+                    removed_entry = next((e for e in old_top_80 if e["trader_id"] == old_trader_id), None)
+                    if removed_entry:
+                        events.append({
+                            "event": "REMOVED",
+                            "entry": {**removed_entry, "rank": LEADERBOARD_SIZE + 1},
+                            "rank": LEADERBOARD_SIZE + 1
+                        })
 
-            # ── Case 3: Board full — check if trade beats the lowest entry ─
-            lowest = board[-1]
-            if risk_score > lowest["risk_score"]:
-                removed_entry  = {**lowest, "rank": LEADERBOARD_SIZE}
-                board[-1]      = entry
-                board[:]       = _sort_board(board)
-                new_rank       = _rank_of(board, trader_id)
+            # Publish all generated events
+            for ev in events:
+                await _publish(ev)
 
-                removed_event = {
-                    "event": "REMOVED",
-                    "entry": removed_entry,
-                    "rank" : LEADERBOARD_SIZE,
-                }
-                new_event = {
-                    "event": "NEW_ENTRY",
-                    "entry": {**entry, "rank": new_rank},
-                    "rank" : new_rank,
-                }
-                await _publish(removed_event)
-                await _publish(new_event)
-                return new_event
-
-            # Trade doesn't make the cut
-            return None
+            # Return the primary event (the first one) so caller knows something happened
+            return events[0] if events else None
 
     @staticmethod
     def subscribe() -> asyncio.Queue:
@@ -169,7 +159,6 @@ async def _publish(event: dict) -> None:
 def _fraud_type(fraud_prob: float, anomaly_type: str | None) -> str:
     """Derive a fraud type label from ML scores."""
     if anomaly_type and anomaly_type not in ("", "nan", "None"):
-        # capitalise e.g. "spoofing" → "Spoofing"
         mapping = {
             "spoofing"           : "Spoofing",
             "insider_trading"    : "Insider Trading",

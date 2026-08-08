@@ -186,7 +186,7 @@ export function SentinelProvider({ children }: { children: ReactNode }) {
               const without = prev.filter((e) => e.trader_id !== entry.trader_id);
               const next = [...without, entry]
                 .sort((a, b) => b.risk_score - a.risk_score)
-                .slice(0, 80)
+                .slice(0, 81)
                 .map((e, i) => ({ ...e, rank: i + 1 }));
               return next;
             });
@@ -198,6 +198,7 @@ export function SentinelProvider({ children }: { children: ReactNode }) {
               const next = prev
                 .map((e) => (e.trader_id === entry.trader_id ? entry : e))
                 .sort((a, b) => b.risk_score - a.risk_score)
+                .slice(0, 81)
                 .map((e, i) => ({ ...e, rank: i + 1 }));
               return next;
             });
@@ -209,6 +210,7 @@ export function SentinelProvider({ children }: { children: ReactNode }) {
               prev
                 .map((e) => (e.trader_id === entry.trader_id ? entry : e))
                 .sort((a, b) => b.risk_score - a.risk_score)
+                .slice(0, 81)
                 .map((e, i) => ({ ...e, rank: i + 1 })),
             );
             scheduleFlashClear(entry.alert_id);
