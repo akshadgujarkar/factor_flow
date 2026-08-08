@@ -76,7 +76,7 @@ function Page() {
                       <div className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-primary/50" />
                       <div className="text-xs text-muted-foreground">{new Date(selectedCase.created_at).toLocaleString()}</div>
                       <div className="text-sm font-medium">Trade Executed & Scored</div>
-                      <div className="text-xs text-muted-foreground mt-0.5 font-mono">ID: {selectedCase.trade_id || 'TRD-AUTO'}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5 font-mono">ID: {selectedCase.alert_id}</div>
                     </div>
                     <div className="relative">
                       <div className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-primary/80" />

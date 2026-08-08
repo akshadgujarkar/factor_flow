@@ -4,7 +4,7 @@
  */
 
 export type Severity = "Low" | "Medium" | "High" | "Critical";
-export type AlertStatus = "Pending" | "Investigating" | "Closed";
+export type AlertStatus = "Pending" | "Investigating" | "Closed" | "Confirmed Fraud" | "False Positive" | "Under Investigation" | "Escalated";
 export type UserRole = "Investigator" | "Compliance Officer" | "Admin";
 
 export type FraudType =

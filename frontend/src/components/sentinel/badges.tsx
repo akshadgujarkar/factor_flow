@@ -56,6 +56,10 @@ const STATUS_STYLES: Record<AlertStatus, string> = {
   Pending: "text-medium border-medium/35 bg-medium/10",
   Investigating: "text-cyan border-cyan/35 bg-cyan/10",
   Closed: "text-muted-foreground border-border bg-elevated",
+  "Confirmed Fraud": "text-critical border-critical/40 bg-critical/12",
+  "False Positive": "text-muted-foreground border-border bg-elevated/50",
+  "Under Investigation": "text-cyan border-cyan/35 bg-cyan/10",
+  "Escalated": "text-high border-high/40 bg-high/12",
 };
 
 export function StatusBadge({ status }: { status: AlertStatus }) {

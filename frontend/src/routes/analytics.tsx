@@ -39,7 +39,7 @@ function Page() {
   const fraudDistribution = useMemo(() => {
     const by = { Critical: 0, High: 0, Medium: 0, Low: 0 } as Record<string, number>;
     alerts.forEach((a) => {
-      if (by[a.severity] !== undefined) by[a.severity] += 1;
+      if (by[a.severity] !== undefined) by[a.severity]! += 1;
     });
     return Object.keys(by).map((k) => ({ name: k, value: by[k] }));
   }, [alerts]);

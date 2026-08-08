@@ -16,8 +16,9 @@ import type {
   LeaderboardEvent,
   Trade,
   UserRole,
+  Severity,
 } from "@/types/sentinel";
-import { BASE_TIME, makeRng, makeTxHash } from "@/data/mock";
+import { BASE_TIME, makeRng, makeTxHash, severityFor } from "@/data/mock";
 
 export interface TimelinePoint {
   t: string;
@@ -205,7 +206,13 @@ export function SentinelProvider({ children }: { children: ReactNode }) {
 
     const clearFlash = (alertId: string) => {
       setLeaderboard((prev) =>
-        prev.map((e) => (e.alert_id === alertId ? { ...e, _flash: undefined } : e)),
+        prev.map((e) => {
+          if (e.alert_id === alertId) {
+            const { _flash, ...rest } = e;
+            return rest as LeaderboardEntry;
+          }
+          return e;
+        })
       );
     };
 
@@ -224,7 +231,10 @@ export function SentinelProvider({ children }: { children: ReactNode }) {
 
           if (msg.event === "SNAPSHOT" && msg.board) {
             // Replace entire board — no flash on initial load
-            setLeaderboard(msg.board.map((e) => ({ ...e, _flash: undefined })));
+            setLeaderboard(msg.board.map((e) => {
+              const { _flash, ...rest } = e;
+              return rest as LeaderboardEntry;
+            }));
 
           } else if (msg.event === "NEW_ENTRY" && msg.entry) {
             const entry: LeaderboardEntry = { ...msg.entry, _flash: "new" };
@@ -351,8 +361,8 @@ export function SentinelProvider({ children }: { children: ReactNode }) {
                   ...prev,
                   {
                     t: new Date().toISOString().slice(11, 16),
-                    detections: prev.length > 0 ? prev[prev.length - 1].detections + 1 : 1,
-                    critical: prev.length > 0 ? prev[prev.length - 1].critical + (alert.severity === "Critical" ? 1 : 0) : 0,
+                    detections: prev.length > 0 ? prev[prev.length - 1]!.detections + 1 : 1,
+                    critical: prev.length > 0 ? prev[prev.length - 1]!.critical + (alert.severity === "Critical" ? 1 : 0) : 0,
                   },
                 ];
                 return next.slice(-22);
