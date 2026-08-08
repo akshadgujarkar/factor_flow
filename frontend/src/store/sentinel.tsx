@@ -12,6 +12,8 @@ import type {
   Alert,
   AuthUser,
   BlockchainRecord,
+  LeaderboardEntry,
+  LeaderboardEvent,
   Trade,
   UserRole,
 } from "@/types/sentinel";
@@ -39,6 +41,10 @@ interface SentinelState {
   tradesMonitored: number;
   autoAnchorThreshold: number;
   setAutoAnchorThreshold: (v: number) => void;
+
+  /** Real-time Top-80 leaderboard sorted by risk_score desc */
+  leaderboard: LeaderboardEntry[];
+  lastLeaderboardEvent: LeaderboardEvent | null;
 
   anchorCase: (alert: Alert, reason?: string) => BlockchainRecord;
   updateAlert: (id: string, patch: Partial<Alert>) => void;
@@ -68,6 +74,8 @@ export function SentinelProvider({ children }: { children: ReactNode }) {
   const [timeline, setTimeline] = useState<TimelinePoint[]>([]);
   const [tradesMonitored, setTradesMonitored] = useState(1_284_930);
   const [autoAnchorThreshold, setAutoAnchorThreshold] = useState(78);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [lastLeaderboardEvent, setLastLeaderboardEvent] = useState<LeaderboardEvent | null>(null);
 
   const rng = useRef(makeRng(Date.now() % 100000)).current;
   const counter = useRef(400);
@@ -138,6 +146,106 @@ export function SentinelProvider({ children }: { children: ReactNode }) {
     },
     [blockchain.length, user],
   );
+
+  // ── Leaderboard WebSocket (/ws/leaderboard) ────────────────────────
+  useEffect(() => {
+    if (!hydrated) return;
+
+    let ws: WebSocket;
+    let reconnectTimeout: ReturnType<typeof setTimeout>;
+    // Track flash-clear timers so we can cancel on unmount
+    const flashTimers: ReturnType<typeof setTimeout>[] = [];
+
+    const clearFlash = (alertId: string) => {
+      setLeaderboard((prev) =>
+        prev.map((e) => (e.alert_id === alertId ? { ...e, _flash: undefined } : e)),
+      );
+    };
+
+    const scheduleFlashClear = (alertId: string, ms = 2000) => {
+      const t = setTimeout(() => clearFlash(alertId), ms);
+      flashTimers.push(t);
+    };
+
+    const connect = () => {
+      ws = new WebSocket("ws://localhost:8000/ws/leaderboard");
+
+      ws.onmessage = (event) => {
+        try {
+          const msg: LeaderboardEvent = JSON.parse(event.data);
+          setLastLeaderboardEvent(msg);
+
+          if (msg.event === "SNAPSHOT" && msg.board) {
+            // Replace entire board — no flash on initial load
+            setLeaderboard(msg.board.map((e) => ({ ...e, _flash: undefined })));
+
+          } else if (msg.event === "NEW_ENTRY" && msg.entry) {
+            const entry: LeaderboardEntry = { ...msg.entry, _flash: "new" };
+            setLeaderboard((prev) => {
+              // Remove if trader already present (stale), insert, sort, cap 80
+              const without = prev.filter((e) => e.trader_id !== entry.trader_id);
+              const next = [...without, entry]
+                .sort((a, b) => b.risk_score - a.risk_score)
+                .slice(0, 80)
+                .map((e, i) => ({ ...e, rank: i + 1 }));
+              return next;
+            });
+            scheduleFlashClear(entry.alert_id);
+
+          } else if (msg.event === "RANK_CHANGE" && msg.entry) {
+            const entry: LeaderboardEntry = { ...msg.entry, _flash: "moved" };
+            setLeaderboard((prev) => {
+              const next = prev
+                .map((e) => (e.trader_id === entry.trader_id ? entry : e))
+                .sort((a, b) => b.risk_score - a.risk_score)
+                .map((e, i) => ({ ...e, rank: i + 1 }));
+              return next;
+            });
+            scheduleFlashClear(entry.alert_id);
+
+          } else if (msg.event === "SCORE_UPDATE" && msg.entry) {
+            const entry: LeaderboardEntry = { ...msg.entry, _flash: "updated" };
+            setLeaderboard((prev) =>
+              prev
+                .map((e) => (e.trader_id === entry.trader_id ? entry : e))
+                .sort((a, b) => b.risk_score - a.risk_score)
+                .map((e, i) => ({ ...e, rank: i + 1 })),
+            );
+            scheduleFlashClear(entry.alert_id);
+
+          } else if (msg.event === "REMOVED" && msg.entry) {
+            const entry: LeaderboardEntry = { ...msg.entry, _flash: "removed" };
+            // Brief fade-out then remove
+            setLeaderboard((prev) =>
+              prev.map((e) => (e.trader_id === entry.trader_id ? { ...e, _flash: "removed" } : e)),
+            );
+            const t = setTimeout(() => {
+              setLeaderboard((prev) =>
+                prev
+                  .filter((e) => e.trader_id !== entry.trader_id)
+                  .map((e, i) => ({ ...e, rank: i + 1 })),
+              );
+            }, 500);
+            flashTimers.push(t);
+          }
+        } catch (err) {
+          console.error("Leaderboard WS error:", err);
+        }
+      };
+
+      ws.onclose = () => {
+        reconnectTimeout = setTimeout(connect, 3000);
+      };
+    };
+
+    connect();
+
+    return () => {
+      clearTimeout(reconnectTimeout);
+      flashTimers.forEach(clearTimeout);
+      if (ws) ws.close();
+    };
+  }, [hydrated]);
 
   // Real-time live feed from FastAPI backend
   useEffect(() => {
@@ -237,6 +345,8 @@ export function SentinelProvider({ children }: { children: ReactNode }) {
       tradesMonitored,
       autoAnchorThreshold,
       setAutoAnchorThreshold,
+      leaderboard,
+      lastLeaderboardEvent,
       anchorCase,
       updateAlert,
     }),
@@ -252,6 +362,8 @@ export function SentinelProvider({ children }: { children: ReactNode }) {
       timeline,
       tradesMonitored,
       autoAnchorThreshold,
+      leaderboard,
+      lastLeaderboardEvent,
       anchorCase,
       updateAlert,
     ],
