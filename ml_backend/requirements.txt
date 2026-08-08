@@ -8,3 +8,4 @@ scikit-learn>=1.4.0
 pandas>=2.0.0
 numpy>=1.26.0
 faker>=25.0.0
+web3>=7.0.0
