@@ -97,6 +97,33 @@ export interface DataSource {
   last_updated?: string;
 }
 
+/**
+ * A leaderboard entry is an Alert enriched with a live rank and an optional
+ * animation hint (_flash) that the UI clears after the transition completes.
+ */
+export interface LeaderboardEntry extends Alert {
+  rank: number;
+  trade_id?: string;
+  _flash?: "new" | "moved" | "updated" | "removed";
+}
+
+export type LeaderboardEventType =
+  | "SNAPSHOT"
+  | "NEW_ENTRY"
+  | "RANK_CHANGE"
+  | "SCORE_UPDATE"
+  | "REMOVED"
+  | "HEARTBEAT";
+
+export interface LeaderboardEvent {
+  event: LeaderboardEventType;
+  entry?: LeaderboardEntry;
+  board?: LeaderboardEntry[];   // only present for SNAPSHOT
+  rank?: number;
+  prev_rank?: number;
+}
+
+
 export interface TimelineEvent {
   id: string;
   time: string;

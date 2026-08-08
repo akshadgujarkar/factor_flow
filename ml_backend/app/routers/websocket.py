@@ -16,6 +16,7 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
 from app.core.config import settings
 from app.services.predictor import predict_batch
+from app.core.leaderboard import LeaderboardManager
 
 router = APIRouter()
 
@@ -98,6 +99,10 @@ async def live_feed(websocket: WebSocket):
                 feed_counters["trades_sent"] += 1
                 feed_counters["bytes_sent"] += len(json.dumps(payload))
                 feed_counters["last_trade_ts"] = time.time()
+
+                # Feed scored trade into the leaderboard (non-blocking)
+                asyncio.create_task(LeaderboardManager.ingest(msg))
+
                 await asyncio.sleep(settings.WS_INTERVAL)
 
         # End of stream
