@@ -58,7 +58,7 @@ contract FactorFlowLedger {
     }
 
     /**
-     * @dev Record a high-risk trade alert on-chain.
+     * @dev Record a high-risk trade alert on-chain. Restrict to owner/authorized backend wallet.
      */
     function recordAlert(
         string calldata tradeId,
@@ -66,7 +66,7 @@ contract FactorFlowLedger {
         uint256 riskScore,
         Severity severity,
         string calldata shapProofHash
-    ) external {
+    ) external onlyOwner {
         require(bytes(tradeId).length > 0, "FactorFlowLedger: tradeId cannot be empty");
         require(bytes(alerts[tradeId].tradeId).length == 0, "FactorFlowLedger: alert already recorded");
         require(riskScore <= 100, "FactorFlowLedger: risk score must be <= 100");
@@ -99,9 +99,9 @@ contract FactorFlowLedger {
     }
 
     /**
-     * @dev Update compliance resolution status for a flagged alert.
+     * @dev Update compliance resolution status for a flagged alert. Restrict to owner/authorized backend wallet.
      */
-    function resolveAlert(string calldata tradeId, string calldata resolutionNote) external {
+    function resolveAlert(string calldata tradeId, string calldata resolutionNote) external onlyOwner {
         require(bytes(alerts[tradeId].tradeId).length > 0, "FactorFlowLedger: alert does not exist");
         require(!alerts[tradeId].resolved, "FactorFlowLedger: alert is already resolved");
 

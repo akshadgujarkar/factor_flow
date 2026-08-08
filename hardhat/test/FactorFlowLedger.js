@@ -4,10 +4,10 @@ const hre = require("hardhat");
 describe("FactorFlowLedger Contract", function () {
   let ledger;
   let owner;
-  let officer;
+  let unauthorizedUser;
 
   beforeEach(async function () {
-    [owner, officer] = await hre.ethers.getSigners();
+    [owner, unauthorizedUser] = await hre.ethers.getSigners();
     const FactorFlowLedger = await hre.ethers.getContractFactory("FactorFlowLedger");
     ledger = await FactorFlowLedger.deploy();
     await ledger.waitForDeployment();
@@ -24,7 +24,7 @@ describe("FactorFlowLedger Contract", function () {
   });
 
   describe("Alert Recording", function () {
-    it("Should successfully record a trade alert", async function () {
+    it("Should allow owner to successfully record a trade alert", async function () {
       const tradeId = "TRD-88291";
       const traderId = "TRD-901";
       const riskScore = 92;
@@ -32,10 +32,10 @@ describe("FactorFlowLedger Contract", function () {
       const shapProof = "0xa1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef0";
 
       await expect(
-        ledger.connect(officer).recordAlert(tradeId, traderId, riskScore, severity, shapProof)
+        ledger.connect(owner).recordAlert(tradeId, traderId, riskScore, severity, shapProof)
       )
         .to.emit(ledger, "AlertRecorded")
-        .withArgs(tradeId, traderId, riskScore, severity, shapProof, (ts) => ts > 0, officer.address);
+        .withArgs(tradeId, traderId, riskScore, severity, shapProof, (ts) => ts > 0, owner.address);
 
       expect(await ledger.getAlertCount()).to.equal(1);
 
@@ -48,30 +48,45 @@ describe("FactorFlowLedger Contract", function () {
       expect(alert.resolved).to.equal(false);
     });
 
+    it("Should revert if unauthorized non-owner attempts to record alert", async function () {
+      await expect(
+        ledger.connect(unauthorizedUser).recordAlert("TRD-999", "TRD-001", 90, 3, "0xproof")
+      ).to.be.revertedWith("FactorFlowLedger: caller is not the owner");
+    });
+
     it("Should prevent recording duplicate alert IDs", async function () {
       const tradeId = "TRD-99001";
-      await ledger.recordAlert(tradeId, "TRD-100", 85, 2, "0x1234");
+      await ledger.connect(owner).recordAlert(tradeId, "TRD-100", 85, 2, "0x1234");
 
       await expect(
-        ledger.recordAlert(tradeId, "TRD-100", 85, 2, "0x1234")
+        ledger.connect(owner).recordAlert(tradeId, "TRD-100", 85, 2, "0x1234")
       ).to.be.revertedWith("FactorFlowLedger: alert already recorded");
     });
   });
 
   describe("Alert Resolution", function () {
-    it("Should resolve an alert and record resolution notes", async function () {
+    it("Should allow owner to resolve an alert", async function () {
       const tradeId = "TRD-77100";
-      await ledger.recordAlert(tradeId, "TRD-202", 78, 2, "0xproof");
+      await ledger.connect(owner).recordAlert(tradeId, "TRD-202", 78, 2, "0xproof");
 
       await expect(
-        ledger.connect(officer).resolveAlert(tradeId, "Verified insider relationship via HR logs")
+        ledger.connect(owner).resolveAlert(tradeId, "Verified insider relationship via HR logs")
       )
         .to.emit(ledger, "AlertResolved")
-        .withArgs(tradeId, "Verified insider relationship via HR logs", officer.address, (ts) => ts > 0);
+        .withArgs(tradeId, "Verified insider relationship via HR logs", owner.address, (ts) => ts > 0);
 
       const alert = await ledger.getAlert(tradeId);
       expect(alert.resolved).to.equal(true);
       expect(alert.resolutionNote).to.equal("Verified insider relationship via HR logs");
+    });
+
+    it("Should revert if unauthorized non-owner attempts to resolve alert", async function () {
+      const tradeId = "TRD-77101";
+      await ledger.connect(owner).recordAlert(tradeId, "TRD-202", 78, 2, "0xproof");
+
+      await expect(
+        ledger.connect(unauthorizedUser).resolveAlert(tradeId, "Unauthorized resolution attempt")
+      ).to.be.revertedWith("FactorFlowLedger: caller is not the owner");
     });
   });
 });
