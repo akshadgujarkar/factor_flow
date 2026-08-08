@@ -18,7 +18,7 @@ import asyncio
 
 from app.core.config import settings
 from app.core.model_loader import ModelLoader
-from app.routers import trades, stats, websocket, data_sources, blockchain, leaderboard_ws
+from app.routers import trades, stats, websocket, data_sources, blockchain, leaderboard_ws, investigations
 from app.blockchain.config import blockchain_settings
 from app.blockchain.client import blockchain_client
 
@@ -64,6 +64,7 @@ app.include_router(trades.router,        prefix="/api", tags=["Trades"])
 app.include_router(stats.router,         prefix="/api", tags=["Stats"])
 app.include_router(data_sources.router,  prefix="/api", tags=["Data Sources"])
 app.include_router(blockchain.router,    prefix="/api", tags=["Blockchain"])
+app.include_router(investigations.router, prefix="/api", tags=["Investigations"])
 app.include_router(websocket.router,     tags=["WebSocket"])
 app.include_router(leaderboard_ws.router, tags=["Leaderboard"])
 

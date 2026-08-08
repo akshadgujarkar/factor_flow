@@ -38,6 +38,8 @@ interface SentinelState {
   alerts: Alert[];
   blockchain: BlockchainRecord[];
   timeline: TimelinePoint[];
+  cases: Alert[];
+  fetchCases: () => Promise<void>;
   tradesMonitored: number;
   autoAnchorThreshold: number;
   setAutoAnchorThreshold: (v: number) => void;
@@ -48,6 +50,8 @@ interface SentinelState {
 
   anchorCase: (alert: Alert, reason?: string) => BlockchainRecord;
   updateAlert: (id: string, patch: Partial<Alert>) => void;
+  updateCaseStatus: (caseId: string, status: string, note?: string) => Promise<void>;
+  anchorCaseToBlockchain: (caseId: string) => Promise<void>;
 }
 
 const Ctx = createContext<SentinelState | null>(null);
@@ -76,6 +80,49 @@ export function SentinelProvider({ children }: { children: ReactNode }) {
   const [autoAnchorThreshold, setAutoAnchorThreshold] = useState(78);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [lastLeaderboardEvent, setLastLeaderboardEvent] = useState<LeaderboardEvent | null>(null);
+  const [cases, setCases] = useState<Alert[]>([]);
+
+  const fetchCases = useCallback(async () => {
+    try {
+      const res = await fetch("http://localhost:8000/api/investigations");
+      if (res.ok) {
+        const data = await res.json();
+        setCases(data);
+      }
+    } catch (e) {
+      console.error("Failed to fetch cases:", e);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCases();
+    const t = setInterval(fetchCases, 3000);
+    return () => clearInterval(t);
+  }, [fetchCases]);
+
+  const updateCaseStatus = useCallback(async (caseId: string, status: string, note?: string) => {
+    try {
+      await fetch(`http://localhost:8000/api/investigations/${caseId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status, note }),
+      });
+      fetchCases();
+    } catch (e) {
+      console.error("Failed to update case:", e);
+    }
+  }, [fetchCases]);
+
+  const anchorCaseToBlockchain = useCallback(async (caseId: string) => {
+    try {
+      await fetch(`http://localhost:8000/api/investigations/${caseId}/blockchain`, {
+        method: "POST",
+      });
+      fetchCases();
+    } catch (e) {
+      console.error("Failed to anchor case:", e);
+    }
+  }, [fetchCases]);
 
   const rng = useRef(makeRng(Date.now() % 100000)).current;
   const counter = useRef(400);
@@ -351,6 +398,10 @@ export function SentinelProvider({ children }: { children: ReactNode }) {
       lastLeaderboardEvent,
       anchorCase,
       updateAlert,
+      cases,
+      fetchCases,
+      updateCaseStatus,
+      anchorCaseToBlockchain,
     }),
     [
       hydrated,
@@ -368,6 +419,10 @@ export function SentinelProvider({ children }: { children: ReactNode }) {
       lastLeaderboardEvent,
       anchorCase,
       updateAlert,
+      cases,
+      fetchCases,
+      updateCaseStatus,
+      anchorCaseToBlockchain,
     ],
   );
 
