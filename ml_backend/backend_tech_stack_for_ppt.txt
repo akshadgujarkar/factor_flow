@@ -1,0 +1,19 @@
+Backend Tech Stack & Architecture
+
+1. Core Framework:
+- FastAPI: A high-performance, modern Python web framework used for building the REST API.
+- Uvicorn: An ASGI web server that runs the FastAPI application asynchronously.
+
+2. Data Validation & Schemas:
+- Pydantic: Used for strictly defining and validating the structure of incoming API requests (e.g., trade data) and outgoing responses.
+
+3. Machine Learning Ecosystem:
+- XGBoost: An optimized distributed gradient boosting library used for the core predictive modeling.
+- Scikit-Learn: Used for data preprocessing, splitting, and evaluation metrics.
+- SHAP: Utilized for model explainability and feature importance analysis.
+- Pandas & NumPy: Used for data manipulation, aggregation, and numerical computations.
+
+4. Key Features:
+- RESTful API Endpoints (e.g., /trades, /predict)
+- Automated API Documentation (Swagger UI built-in via FastAPI)
+- Modular Architecture (separated into routers, models, schemas, and core services)

@@ -1,0 +1,501 @@
+trader_id,department,seniority,avg_daily_trades,avg_trade_value,risk_profile,years_experience,network_risk_score,peer_group
+TRD0001,Derivatives,Senior,22,3512129,Medium,10,0.5119,10
+TRD0002,Fixed Income,Director,3,544163,High,25,0.7355,3
+TRD0003,FX,Director,11,3778125,Low,2,0.3661,1
+TRD0004,Derivatives,Mid,12,581644,Low,13,0.5623,8
+TRD0005,Equities,Mid,20,301766,Medium,24,0.9182,6
+TRD0006,Commodities,Senior,4,620865,Medium,28,0.5007,9
+TRD0007,Derivatives,Mid,11,2326168,Medium,8,0.8652,2
+TRD0008,Derivatives,Senior,5,3116867,Low,19,0.7561,1
+TRD0009,Equities,Mid,20,2066258,Low,6,0.0652,6
+TRD0010,Fixed Income,Junior,16,653746,Medium,4,0.4134,9
+TRD0011,Fixed Income,Junior,13,1035883,Low,11,0.6664,5
+TRD0012,Commodities,Senior,11,4269292,Low,26,0.9375,8
+TRD0013,Derivatives,Junior,5,4814987,Medium,20,0.4409,10
+TRD0014,FX,Mid,23,3783643,Medium,15,0.0972,9
+TRD0015,Fixed Income,Mid,16,561898,High,9,0.5383,6
+TRD0016,Equities,Junior,9,4108053,Low,5,0.129,7
+TRD0017,Fixed Income,Mid,11,3475344,Low,8,0.7164,6
+TRD0018,Equities,Senior,18,2653999,High,5,0.4872,7
+TRD0019,FX,Junior,18,759030,Low,6,0.69,6
+TRD0020,Derivatives,Senior,12,4983552,Low,20,0.8272,6
+TRD0021,Derivatives,Director,8,2240901,Low,4,0.6012,5
+TRD0022,Fixed Income,Mid,17,268666,Medium,2,0.5857,7
+TRD0023,Commodities,Junior,17,1089344,High,16,0.7193,8
+TRD0024,FX,Senior,15,2036261,Medium,9,0.8019,10
+TRD0025,Derivatives,Junior,3,358517,Medium,14,0.8269,7
+TRD0026,Equities,Mid,12,1653486,Low,5,0.0442,2
+TRD0027,Fixed Income,Director,16,2368598,Low,7,0.5328,6
+TRD0028,Equities,Director,23,4745795,Low,13,0.2133,4
+TRD0029,Equities,Senior,14,477556,Low,21,0.8187,1
+TRD0030,Derivatives,Mid,9,2905461,Low,13,0.6195,1
+TRD0031,Derivatives,Senior,14,4583017,Low,16,0.405,6
+TRD0032,Commodities,Senior,6,4040645,Low,16,0.1868,10
+TRD0033,Equities,Mid,4,4628460,Medium,8,0.3287,6
+TRD0034,Fixed Income,Senior,17,893188,Medium,9,0.6716,5
+TRD0035,Fixed Income,Junior,24,4016648,Low,13,0.2021,1
+TRD0036,Equities,Junior,21,4894239,Low,1,0.098,7
+TRD0037,Equities,Mid,15,1663861,Medium,20,0.8447,1
+TRD0038,Fixed Income,Junior,2,2518265,Medium,18,0.7284,9
+TRD0039,Equities,Junior,24,2677664,Medium,9,0.1978,9
+TRD0040,Derivatives,Senior,12,2493676,Low,11,0.2848,10
+TRD0041,Fixed Income,Director,8,1484419,Medium,10,0.9237,3
+TRD0042,FX,Mid,22,4855879,Low,19,0.6757,2
+TRD0043,Derivatives,Senior,19,4784658,Low,23,0.5839,3
+TRD0044,Equities,Director,19,1934625,Low,4,0.2992,8
+TRD0045,FX,Junior,8,4036195,Low,12,0.2912,3
+TRD0046,FX,Mid,24,2017748,Low,1,0.0472,9
+TRD0047,Fixed Income,Mid,12,3984312,Low,14,0.6948,2
+TRD0048,Equities,Junior,14,2944525,Medium,8,0.0506,1
+TRD0049,Derivatives,Senior,19,2377339,Low,10,0.0146,3
+TRD0050,Equities,Mid,17,683860,Low,14,0.6957,8
+TRD0051,Equities,Mid,5,3290224,Low,10,0.9019,7
+TRD0052,Equities,Junior,8,1639373,Low,12,0.7211,4
+TRD0053,Derivatives,Junior,10,1123450,Low,23,0.4533,7
+TRD0054,Derivatives,Director,23,1006381,Low,24,0.4669,7
+TRD0055,Derivatives,Junior,18,4910294,Low,1,0.42,6
+TRD0056,Derivatives,Junior,10,561253,Medium,11,0.3152,6
+TRD0057,Fixed Income,Mid,18,4002702,High,25,0.5004,2
+TRD0058,Fixed Income,Mid,18,4337415,Low,16,0.4153,3
+TRD0059,Equities,Mid,11,203711,Medium,6,0.5723,6
+TRD0060,Equities,Mid,11,2967189,High,18,0.8542,2
+TRD0061,Derivatives,Junior,22,2908153,High,5,0.9453,5
+TRD0062,Fixed Income,Junior,14,1825430,Medium,1,0.084,2
+TRD0063,Fixed Income,Senior,5,3350235,High,19,0.3716,8
+TRD0064,Derivatives,Senior,18,2072913,High,15,0.1799,2
+TRD0065,Derivatives,Senior,15,2226473,Medium,22,0.341,1
+TRD0066,Fixed Income,Senior,13,2186019,Low,11,0.2802,7
+TRD0067,Fixed Income,Senior,18,4013337,Low,25,0.1741,3
+TRD0068,Equities,Junior,22,3184088,Low,13,0.7282,4
+TRD0069,Equities,Mid,9,1926282,Low,22,0.4765,4
+TRD0070,Fixed Income,Mid,11,4637508,Low,3,0.8741,3
+TRD0071,Equities,Mid,6,4020191,Low,3,0.0406,8
+TRD0072,Fixed Income,Senior,16,4667259,Medium,23,0.073,7
+TRD0073,FX,Mid,11,3665979,Medium,25,0.3891,3
+TRD0074,Equities,Senior,9,1987885,Medium,28,0.0855,7
+TRD0075,Equities,Director,18,3876061,Low,10,0.257,8
+TRD0076,Equities,Mid,11,1679849,Low,1,0.9369,6
+TRD0077,Equities,Director,12,1391097,Medium,29,0.2064,6
+TRD0078,Derivatives,Mid,12,2282680,Medium,18,0.1962,10
+TRD0079,Fixed Income,Director,7,4848053,High,8,0.5492,5
+TRD0080,Derivatives,Mid,4,2861274,High,23,0.4781,4
+TRD0081,Derivatives,Mid,21,1949280,High,27,0.5556,6
+TRD0082,Fixed Income,Mid,4,2335998,Low,9,0.3641,9
+TRD0083,FX,Junior,9,1491520,Low,23,0.7872,8
+TRD0084,Equities,Mid,17,3310829,Low,23,0.1403,1
+TRD0085,Equities,Director,5,1784602,Medium,15,0.4127,5
+TRD0086,Equities,Senior,17,2794275,High,19,0.6584,8
+TRD0087,Derivatives,Junior,18,1880599,Low,8,0.8261,3
+TRD0088,Fixed Income,Mid,17,1637541,Medium,27,0.3574,10
+TRD0089,Equities,Junior,9,4852666,Low,29,0.5437,9
+TRD0090,Fixed Income,Junior,2,1761367,Low,29,0.075,9
+TRD0091,Equities,Director,22,399075,Low,22,0.1701,1
+TRD0092,Derivatives,Mid,9,1924034,Low,2,0.075,6
+TRD0093,Fixed Income,Mid,20,2684112,High,11,0.6942,6
+TRD0094,Fixed Income,Mid,6,518466,Low,13,0.2808,7
+TRD0095,Equities,Junior,5,1563137,Medium,28,0.6903,9
+TRD0096,Derivatives,Mid,19,872010,Medium,16,0.0724,4
+TRD0097,Fixed Income,Senior,23,2528208,Low,16,0.8208,6
+TRD0098,Equities,Senior,21,3629413,Low,5,0.7954,7
+TRD0099,Equities,Director,19,4843977,Medium,24,0.0936,8
+TRD0100,Commodities,Senior,7,1976028,Low,10,0.0323,8
+TRD0101,FX,Mid,23,4323130,High,3,0.0629,4
+TRD0102,Derivatives,Senior,17,1111967,Low,29,0.8124,10
+TRD0103,Equities,Director,5,3913460,Medium,6,0.2306,1
+TRD0104,Commodities,Senior,4,2835228,Medium,1,0.5254,5
+TRD0105,Derivatives,Director,22,3802957,Low,3,0.4107,7
+TRD0106,Derivatives,Senior,8,3789920,Low,14,0.7578,1
+TRD0107,Fixed Income,Director,19,2685539,High,3,0.4696,5
+TRD0108,Equities,Junior,5,1324240,Low,25,0.4806,6
+TRD0109,Equities,Senior,8,2654611,Low,15,0.9397,7
+TRD0110,FX,Mid,8,4142609,Low,10,0.1511,2
+TRD0111,Fixed Income,Mid,8,4854762,Low,1,0.7909,3
+TRD0112,Equities,Senior,17,4641149,Medium,14,0.0586,3
+TRD0113,Equities,Director,23,948261,Medium,5,0.459,7
+TRD0114,Fixed Income,Director,22,3007102,Low,29,0.8432,4
+TRD0115,Equities,Mid,19,567745,Medium,9,0.6353,6
+TRD0116,FX,Senior,6,3361290,Low,14,0.6541,8
+TRD0117,Derivatives,Senior,24,4962061,Low,1,0.2575,8
+TRD0118,Derivatives,Mid,14,310251,Medium,4,0.4035,2
+TRD0119,Fixed Income,Junior,14,3300034,High,7,0.3546,10
+TRD0120,Derivatives,Junior,18,4730323,Low,2,0.5002,2
+TRD0121,Fixed Income,Senior,19,4243562,Low,22,0.4445,1
+TRD0122,Derivatives,Mid,23,1992799,Medium,28,0.3173,1
+TRD0123,Equities,Director,15,564413,Medium,29,0.2972,3
+TRD0124,Fixed Income,Mid,16,4623306,Low,8,0.2458,9
+TRD0125,Equities,Director,19,4610546,Low,23,0.3531,3
+TRD0126,Fixed Income,Mid,7,2915938,Medium,15,0.1509,7
+TRD0127,Equities,Senior,9,4895528,Low,2,0.8298,5
+TRD0128,Equities,Junior,16,72863,Low,3,0.576,1
+TRD0129,Equities,Mid,3,3102222,Low,16,0.1358,5
+TRD0130,Fixed Income,Senior,9,240782,Low,13,0.6622,1
+TRD0131,Equities,Director,18,4681686,Low,1,0.8068,5
+TRD0132,Commodities,Senior,24,3418073,High,27,0.2333,6
+TRD0133,Fixed Income,Junior,13,4571471,Medium,22,0.1516,6
+TRD0134,Equities,Mid,11,2835206,Medium,15,0.0181,3
+TRD0135,Fixed Income,Junior,12,462152,High,29,0.0544,8
+TRD0136,Equities,Junior,17,181335,Low,29,0.7265,6
+TRD0137,Commodities,Senior,14,1711088,Low,29,0.938,3
+TRD0138,Fixed Income,Senior,2,3730126,High,8,0.0522,5
+TRD0139,Derivatives,Senior,14,797610,Low,26,0.7132,2
+TRD0140,Equities,Director,11,4268119,Medium,15,0.0776,10
+TRD0141,Fixed Income,Senior,18,1235443,Medium,22,0.5666,8
+TRD0142,Fixed Income,Senior,22,2507266,Low,25,0.7207,3
+TRD0143,Commodities,Junior,24,1055251,Low,5,0.3477,7
+TRD0144,Fixed Income,Junior,16,2355499,Low,13,0.0203,7
+TRD0145,Fixed Income,Senior,10,2288261,Low,4,0.5695,7
+TRD0146,Equities,Director,12,77091,Low,9,0.9418,1
+TRD0147,Equities,Junior,6,2860666,Low,12,0.2522,9
+TRD0148,Fixed Income,Mid,23,3943916,Medium,25,0.1881,10
+TRD0149,Fixed Income,Senior,21,4684566,High,26,0.1265,10
+TRD0150,Equities,Junior,21,1687044,Medium,12,0.5319,10
+TRD0151,FX,Mid,9,4408901,Low,10,0.5707,10
+TRD0152,FX,Director,9,4399879,Low,16,0.7547,8
+TRD0153,Equities,Senior,21,4942494,Low,27,0.7179,1
+TRD0154,Fixed Income,Junior,14,1896649,Low,29,0.849,5
+TRD0155,Equities,Director,18,4261912,High,7,0.7674,3
+TRD0156,Derivatives,Mid,13,2847135,Low,6,0.2424,3
+TRD0157,Equities,Director,12,338439,Low,21,0.5325,9
+TRD0158,Derivatives,Mid,16,1388191,Medium,9,0.2896,9
+TRD0159,Derivatives,Mid,20,3376654,Low,6,0.32,6
+TRD0160,Derivatives,Mid,9,844912,Low,1,0.886,8
+TRD0161,Equities,Mid,20,2201923,Low,12,0.651,2
+TRD0162,FX,Director,7,3885794,Medium,12,0.9261,3
+TRD0163,Equities,Junior,11,791309,Medium,17,0.4019,9
+TRD0164,Equities,Junior,22,2508122,Low,6,0.5152,5
+TRD0165,Fixed Income,Mid,23,1113550,High,21,0.4679,6
+TRD0166,Fixed Income,Senior,23,2705615,High,20,0.1108,5
+TRD0167,FX,Senior,9,1241521,Medium,14,0.2325,3
+TRD0168,FX,Director,21,4828808,Low,6,0.506,9
+TRD0169,Equities,Mid,23,429670,Low,15,0.0733,8
+TRD0170,Commodities,Mid,24,4819720,High,20,0.8856,7
+TRD0171,Equities,Junior,2,3969781,Low,11,0.1264,4
+TRD0172,Fixed Income,Mid,19,4285428,Medium,8,0.1961,7
+TRD0173,Equities,Director,24,4264969,Medium,15,0.7294,10
+TRD0174,Commodities,Senior,19,978665,Low,11,0.1011,7
+TRD0175,Equities,Mid,7,4658904,Medium,12,0.8563,5
+TRD0176,Equities,Mid,19,2991649,High,11,0.6922,3
+TRD0177,Fixed Income,Director,4,4812678,Medium,9,0.0745,6
+TRD0178,Commodities,Mid,13,4396829,Low,21,0.6603,4
+TRD0179,FX,Junior,16,2919069,High,14,0.6037,7
+TRD0180,Derivatives,Mid,12,1903596,Medium,14,0.7219,1
+TRD0181,FX,Junior,18,630571,Medium,19,0.7885,2
+TRD0182,FX,Junior,7,550475,Medium,11,0.6852,8
+TRD0183,Fixed Income,Junior,15,1979062,Medium,3,0.561,4
+TRD0184,Equities,Mid,16,4064266,Low,25,0.3131,5
+TRD0185,Derivatives,Senior,16,2551451,Low,2,0.6654,6
+TRD0186,Derivatives,Mid,8,2434729,Low,17,0.9096,5
+TRD0187,Fixed Income,Mid,9,1260045,Medium,8,0.5623,8
+TRD0188,Equities,Director,7,2843743,Medium,7,0.6345,3
+TRD0189,Derivatives,Senior,12,3208472,Medium,2,0.4209,8
+TRD0190,Equities,Mid,15,4911614,Low,27,0.7208,3
+TRD0191,Commodities,Mid,10,3660613,Medium,13,0.9478,4
+TRD0192,Equities,Director,11,3055696,High,10,0.1608,6
+TRD0193,Equities,Junior,8,4554880,Low,22,0.2003,9
+TRD0194,FX,Mid,7,2153647,Medium,2,0.5171,3
+TRD0195,Equities,Director,17,4677997,Medium,17,0.4625,6
+TRD0196,Equities,Mid,20,1881422,Medium,15,0.5473,1
+TRD0197,Fixed Income,Senior,8,682507,Low,17,0.0561,1
+TRD0198,FX,Mid,21,2117215,Medium,4,0.39,8
+TRD0199,Equities,Senior,15,687393,High,28,0.558,8
+TRD0200,Equities,Mid,5,636075,Medium,7,0.5601,4
+TRD0201,Derivatives,Junior,10,4411982,High,20,0.6279,7
+TRD0202,Commodities,Mid,2,3984015,High,22,0.687,4
+TRD0203,Fixed Income,Junior,2,1144998,Low,10,0.6131,3
+TRD0204,Equities,Director,9,4196698,Medium,4,0.7528,5
+TRD0205,Equities,Mid,12,391065,Low,9,0.5973,4
+TRD0206,Equities,Mid,20,1457765,High,24,0.5153,9
+TRD0207,Equities,Senior,5,3545203,Low,27,0.5798,5
+TRD0208,Derivatives,Senior,21,1553793,Low,28,0.1051,4
+TRD0209,Equities,Mid,7,3665992,High,7,0.2668,6
+TRD0210,Fixed Income,Mid,5,4377954,Low,18,0.5058,8
+TRD0211,Derivatives,Director,18,377005,Medium,5,0.8306,3
+TRD0212,Fixed Income,Senior,19,168653,Low,21,0.6483,10
+TRD0213,Equities,Senior,15,4703009,High,13,0.095,5
+TRD0214,FX,Director,4,2626264,High,21,0.5667,7
+TRD0215,Derivatives,Senior,4,2557048,Low,20,0.2184,10
+TRD0216,Derivatives,Junior,10,2345194,Medium,29,0.7,5
+TRD0217,Equities,Mid,12,2196382,Low,15,0.7878,2
+TRD0218,Equities,Junior,24,3466127,Medium,10,0.5678,8
+TRD0219,Commodities,Senior,8,2919740,Medium,16,0.5659,1
+TRD0220,Fixed Income,Director,6,858788,Medium,5,0.3283,5
+TRD0221,Equities,Mid,23,3151861,Low,4,0.4295,10
+TRD0222,Fixed Income,Mid,5,3358237,Low,16,0.8223,5
+TRD0223,Derivatives,Junior,2,612324,Medium,24,0.6899,7
+TRD0224,Commodities,Director,11,1914833,Medium,16,0.4986,6
+TRD0225,Equities,Junior,11,3963012,Low,23,0.3561,3
+TRD0226,Commodities,Junior,16,3112638,Low,6,0.0574,4
+TRD0227,Equities,Junior,22,725030,Low,14,0.1444,6
+TRD0228,Fixed Income,Junior,23,248470,High,18,0.1914,2
+TRD0229,Derivatives,Mid,8,2926995,Low,11,0.361,5
+TRD0230,Equities,Mid,24,2335549,Low,1,0.8975,5
+TRD0231,Equities,Mid,16,4807204,High,3,0.4848,9
+TRD0232,Fixed Income,Junior,3,2635141,Low,27,0.2307,2
+TRD0233,Commodities,Junior,23,4660869,Medium,18,0.1094,9
+TRD0234,Fixed Income,Mid,5,1110915,Low,8,0.328,5
+TRD0235,Commodities,Junior,15,2264321,High,8,0.7768,7
+TRD0236,FX,Senior,20,741137,Medium,2,0.3703,6
+TRD0237,Fixed Income,Junior,7,2892434,High,28,0.7362,3
+TRD0238,Derivatives,Mid,8,982947,Low,4,0.7645,10
+TRD0239,Equities,Mid,12,2486702,Medium,23,0.1142,3
+TRD0240,Equities,Mid,22,1753498,Medium,7,0.5821,1
+TRD0241,FX,Junior,7,969362,Low,10,0.9116,8
+TRD0242,Derivatives,Junior,17,529210,Low,8,0.388,7
+TRD0243,Equities,Director,12,2584657,Low,24,0.0579,9
+TRD0244,Fixed Income,Junior,4,4739232,High,1,0.8779,5
+TRD0245,Derivatives,Mid,18,1033803,Medium,11,0.8406,1
+TRD0246,FX,Mid,21,2054720,Medium,9,0.5008,1
+TRD0247,Derivatives,Mid,15,1161802,Medium,8,0.5291,5
+TRD0248,Fixed Income,Mid,6,4054399,Medium,6,0.209,3
+TRD0249,Fixed Income,Senior,5,2103767,Low,27,0.7803,10
+TRD0250,Fixed Income,Senior,11,4873364,Low,11,0.4787,2
+TRD0251,Derivatives,Mid,13,1263579,Medium,13,0.0418,9
+TRD0252,FX,Mid,14,449639,Low,12,0.652,3
+TRD0253,Fixed Income,Junior,7,2933474,High,29,0.9035,2
+TRD0254,Equities,Mid,13,3275763,Medium,10,0.7894,3
+TRD0255,Equities,Senior,8,4954169,Low,10,0.2706,2
+TRD0256,Derivatives,Junior,17,4363474,Medium,10,0.0601,5
+TRD0257,FX,Mid,20,4426641,Low,10,0.8939,4
+TRD0258,Equities,Director,17,3189460,High,3,0.8908,6
+TRD0259,Equities,Junior,2,1831083,High,18,0.5105,6
+TRD0260,Fixed Income,Mid,24,2173679,High,1,0.6138,1
+TRD0261,Equities,Senior,2,712036,Low,7,0.4448,2
+TRD0262,FX,Junior,24,2183827,Low,6,0.4046,2
+TRD0263,Equities,Junior,2,1853970,Low,9,0.1223,2
+TRD0264,Equities,Junior,13,227699,Low,22,0.1009,1
+TRD0265,Commodities,Director,4,1062115,Low,18,0.2288,4
+TRD0266,Equities,Junior,4,2696273,Low,29,0.7964,6
+TRD0267,Equities,Junior,17,1878247,High,11,0.1471,4
+TRD0268,Equities,Junior,18,4968037,Low,27,0.2231,4
+TRD0269,Equities,Junior,4,2418712,Low,2,0.5257,5
+TRD0270,Equities,Senior,24,4795602,Medium,15,0.2122,6
+TRD0271,Equities,Junior,9,3320520,Medium,24,0.1634,4
+TRD0272,Equities,Mid,9,249976,Medium,16,0.5395,3
+TRD0273,Equities,Mid,8,1057053,Medium,28,0.356,5
+TRD0274,Fixed Income,Senior,12,3543695,High,10,0.5986,1
+TRD0275,Derivatives,Junior,6,2748331,Medium,1,0.8675,5
+TRD0276,Fixed Income,Director,11,1543736,Medium,23,0.1519,10
+TRD0277,Equities,Senior,6,2634319,Medium,2,0.8686,4
+TRD0278,Fixed Income,Junior,3,4519796,Low,23,0.8583,2
+TRD0279,FX,Senior,10,1974104,Low,22,0.7893,8
+TRD0280,FX,Director,17,273317,Low,25,0.6034,2
+TRD0281,Equities,Mid,19,1589248,Low,14,0.5929,2
+TRD0282,Equities,Director,10,4682576,Medium,26,0.6109,2
+TRD0283,Equities,Mid,9,3820798,Low,5,0.6591,9
+TRD0284,Equities,Senior,20,4195504,Low,13,0.0255,10
+TRD0285,Fixed Income,Director,17,4562453,Low,4,0.9106,6
+TRD0286,Fixed Income,Mid,21,631646,Medium,23,0.5605,7
+TRD0287,Equities,Senior,22,1449229,Low,21,0.7446,7
+TRD0288,Fixed Income,Mid,20,346130,Medium,24,0.3646,7
+TRD0289,Fixed Income,Senior,23,73441,High,23,0.0217,6
+TRD0290,Equities,Senior,11,4181802,Low,9,0.4892,10
+TRD0291,FX,Junior,11,4687888,Medium,2,0.4868,8
+TRD0292,Equities,Mid,9,821000,Low,27,0.4208,1
+TRD0293,Commodities,Mid,7,3624736,Low,15,0.3293,4
+TRD0294,Equities,Junior,19,2697745,Medium,3,0.2448,10
+TRD0295,FX,Junior,18,392666,High,27,0.5059,5
+TRD0296,FX,Mid,20,4582937,Low,29,0.3628,3
+TRD0297,Commodities,Junior,5,4362631,Medium,13,0.9217,9
+TRD0298,FX,Junior,13,2858868,Low,23,0.1726,7
+TRD0299,Derivatives,Senior,7,3554047,Medium,2,0.3105,6
+TRD0300,Derivatives,Senior,22,2016304,Medium,3,0.2863,5
+TRD0301,Derivatives,Senior,8,3974553,Medium,9,0.5207,2
+TRD0302,Equities,Mid,5,2252829,Medium,20,0.4793,4
+TRD0303,Fixed Income,Director,15,4946419,Low,4,0.6151,5
+TRD0304,Fixed Income,Mid,22,362429,Medium,1,0.903,10
+TRD0305,FX,Junior,23,902140,Medium,20,0.2781,4
+TRD0306,Fixed Income,Junior,4,4845323,Medium,23,0.6612,2
+TRD0307,Fixed Income,Senior,9,1479469,Low,22,0.0335,5
+TRD0308,Derivatives,Junior,5,1587738,Low,24,0.2566,10
+TRD0309,Equities,Mid,9,3966814,Low,24,0.4459,5
+TRD0310,Equities,Director,14,987349,Low,18,0.0391,4
+TRD0311,Fixed Income,Junior,8,2592015,Low,16,0.5906,7
+TRD0312,Fixed Income,Junior,3,1465934,Low,25,0.6476,7
+TRD0313,Equities,Director,13,1029783,Medium,11,0.7119,3
+TRD0314,Fixed Income,Mid,3,4823647,Low,3,0.4956,10
+TRD0315,Fixed Income,Junior,7,1039490,Medium,22,0.5777,6
+TRD0316,Equities,Director,2,516715,Medium,9,0.3823,1
+TRD0317,Fixed Income,Director,3,3385991,Medium,29,0.0488,5
+TRD0318,Derivatives,Mid,12,4343150,Low,13,0.104,10
+TRD0319,Equities,Senior,21,681104,Low,25,0.6257,4
+TRD0320,Commodities,Mid,19,3553827,Medium,2,0.9458,6
+TRD0321,FX,Junior,4,2726914,High,20,0.0249,7
+TRD0322,Fixed Income,Mid,2,4158594,Low,13,0.5341,8
+TRD0323,Equities,Mid,9,678425,Medium,14,0.7159,9
+TRD0324,Fixed Income,Senior,17,4880692,Medium,8,0.7872,2
+TRD0325,FX,Senior,19,3114597,Medium,29,0.5225,6
+TRD0326,Derivatives,Junior,20,4218665,Low,12,0.5927,6
+TRD0327,FX,Mid,9,1841712,Medium,25,0.6649,2
+TRD0328,Fixed Income,Junior,5,4719742,Low,13,0.8174,7
+TRD0329,Derivatives,Director,2,3150495,High,2,0.125,2
+TRD0330,Equities,Mid,5,678329,Low,26,0.8806,5
+TRD0331,Derivatives,Senior,3,4618362,Low,6,0.0345,4
+TRD0332,Equities,Mid,21,3989153,High,8,0.796,2
+TRD0333,Derivatives,Mid,8,1535996,Low,25,0.0821,9
+TRD0334,FX,Senior,20,2751094,Low,26,0.193,3
+TRD0335,Equities,Senior,14,1970898,Low,27,0.0137,3
+TRD0336,Derivatives,Mid,14,2740303,Low,13,0.4285,9
+TRD0337,Equities,Senior,12,4828602,Low,22,0.3243,9
+TRD0338,Derivatives,Director,20,4499661,Low,10,0.166,1
+TRD0339,Equities,Mid,2,1116923,Medium,22,0.434,3
+TRD0340,Commodities,Mid,4,4860428,Medium,15,0.3882,8
+TRD0341,Equities,Junior,11,2217829,Low,2,0.7316,8
+TRD0342,Commodities,Senior,11,3538949,Medium,13,0.8495,10
+TRD0343,FX,Mid,14,3832904,Low,14,0.6234,6
+TRD0344,Fixed Income,Mid,18,2440545,High,8,0.1269,1
+TRD0345,Derivatives,Junior,15,2310453,Low,11,0.2877,9
+TRD0346,Derivatives,Director,7,2309199,Medium,15,0.8685,2
+TRD0347,Commodities,Mid,9,4319618,Low,2,0.0934,2
+TRD0348,Equities,Senior,19,1962390,Medium,5,0.3924,7
+TRD0349,Fixed Income,Junior,6,1435619,Low,23,0.896,7
+TRD0350,Equities,Director,13,1839915,Medium,11,0.9036,1
+TRD0351,Derivatives,Junior,14,1014669,Low,18,0.3965,2
+TRD0352,Equities,Junior,19,1987958,High,17,0.6374,6
+TRD0353,Fixed Income,Director,18,614688,Medium,16,0.4393,3
+TRD0354,Fixed Income,Director,12,494278,Medium,12,0.7183,7
+TRD0355,Fixed Income,Junior,9,3633058,Medium,15,0.0397,5
+TRD0356,Fixed Income,Mid,10,433308,High,24,0.1455,6
+TRD0357,Derivatives,Senior,11,2862615,Low,28,0.5873,5
+TRD0358,Derivatives,Director,7,3910355,Low,8,0.2286,4
+TRD0359,Fixed Income,Mid,16,3636183,Low,20,0.6361,4
+TRD0360,Fixed Income,Mid,6,2258060,Low,29,0.3401,7
+TRD0361,Commodities,Senior,16,1008478,Medium,1,0.8434,6
+TRD0362,Equities,Senior,19,4656888,High,23,0.7801,6
+TRD0363,Equities,Senior,24,4184046,High,15,0.4733,6
+TRD0364,Equities,Mid,4,3080493,Medium,29,0.7365,3
+TRD0365,Derivatives,Junior,19,479469,Medium,17,0.2649,10
+TRD0366,Fixed Income,Director,3,224121,High,25,0.4746,6
+TRD0367,Derivatives,Director,9,1610339,High,5,0.1956,8
+TRD0368,Derivatives,Senior,6,829740,Low,5,0.8192,9
+TRD0369,Equities,Junior,5,4308766,Medium,27,0.7837,10
+TRD0370,FX,Junior,6,1068807,Medium,16,0.858,7
+TRD0371,Derivatives,Senior,3,1449121,Low,17,0.8348,8
+TRD0372,Equities,Junior,20,4879893,Low,5,0.912,5
+TRD0373,Fixed Income,Director,3,4100386,High,7,0.2246,8
+TRD0374,Equities,Mid,11,1132585,High,24,0.8859,4
+TRD0375,Equities,Senior,18,1948538,High,9,0.5469,8
+TRD0376,Equities,Director,24,2602990,Medium,17,0.4071,1
+TRD0377,Commodities,Mid,21,3338137,Low,10,0.5368,10
+TRD0378,Fixed Income,Mid,5,4684075,Low,8,0.332,3
+TRD0379,Fixed Income,Senior,24,4362072,Medium,5,0.2812,7
+TRD0380,Derivatives,Mid,17,4887104,Medium,27,0.2368,1
+TRD0381,Fixed Income,Mid,6,251194,Medium,28,0.0875,2
+TRD0382,Commodities,Senior,12,1219984,Medium,4,0.4768,10
+TRD0383,Derivatives,Director,23,2836856,Low,11,0.8445,9
+TRD0384,Fixed Income,Mid,11,293132,Medium,17,0.6023,3
+TRD0385,Fixed Income,Junior,6,1808940,Low,12,0.4997,2
+TRD0386,Commodities,Mid,22,810329,Low,21,0.4129,9
+TRD0387,Derivatives,Mid,23,4667953,Low,8,0.4465,10
+TRD0388,Commodities,Junior,24,363475,Low,2,0.2067,2
+TRD0389,Equities,Junior,23,784601,High,10,0.7836,7
+TRD0390,FX,Senior,22,1015864,Low,18,0.1965,3
+TRD0391,Derivatives,Mid,12,785540,Low,6,0.6836,8
+TRD0392,Equities,Director,6,2864420,Medium,24,0.7244,5
+TRD0393,Fixed Income,Junior,16,1853520,Medium,1,0.5504,2
+TRD0394,Derivatives,Junior,7,4566621,Low,2,0.8212,4
+TRD0395,Equities,Senior,12,1341049,Low,15,0.2836,6
+TRD0396,Fixed Income,Director,17,2709233,Low,15,0.8387,8
+TRD0397,FX,Mid,23,3317443,Medium,9,0.6956,1
+TRD0398,Equities,Junior,8,3148648,Low,8,0.7608,10
+TRD0399,Fixed Income,Junior,7,3992094,Low,3,0.6347,7
+TRD0400,Fixed Income,Mid,18,1049242,Low,20,0.8056,9
+TRD0401,Equities,Mid,2,2561907,Medium,11,0.9435,10
+TRD0402,FX,Mid,15,4012888,Low,4,0.405,2
+TRD0403,Derivatives,Junior,19,4321930,Medium,12,0.7751,1
+TRD0404,Equities,Mid,14,3108055,Low,28,0.7099,8
+TRD0405,Commodities,Director,10,3276862,Medium,8,0.4357,2
+TRD0406,FX,Senior,21,4327477,Low,26,0.8813,2
+TRD0407,Equities,Mid,10,3143112,Low,8,0.3808,5
+TRD0408,FX,Junior,18,4746773,Low,6,0.5415,10
+TRD0409,Equities,Mid,12,681589,Medium,8,0.1096,8
+TRD0410,Commodities,Mid,2,1772108,High,10,0.2222,6
+TRD0411,Derivatives,Senior,14,605301,Low,4,0.8003,2
+TRD0412,Derivatives,Director,3,498366,Low,18,0.3828,4
+TRD0413,Equities,Director,23,2386108,High,10,0.3804,7
+TRD0414,FX,Director,15,1168348,Medium,21,0.2412,2
+TRD0415,Equities,Director,10,2065428,Low,15,0.4721,6
+TRD0416,Equities,Director,13,2217315,Low,13,0.7675,1
+TRD0417,Equities,Junior,16,3123571,Medium,14,0.8515,4
+TRD0418,Derivatives,Junior,7,4731183,Medium,5,0.0759,3
+TRD0419,Equities,Mid,8,4254469,Medium,21,0.5503,7
+TRD0420,FX,Mid,11,1922633,High,4,0.4492,10
+TRD0421,Derivatives,Junior,7,1661645,Low,21,0.5874,2
+TRD0422,Equities,Senior,19,3865327,Low,29,0.4304,8
+TRD0423,Equities,Senior,4,662078,Low,23,0.3847,7
+TRD0424,Equities,Mid,21,2725359,Low,14,0.4536,10
+TRD0425,Derivatives,Junior,10,2143931,Low,10,0.5571,10
+TRD0426,FX,Mid,14,954903,Low,26,0.4809,2
+TRD0427,Equities,Junior,5,3101421,Low,8,0.4538,8
+TRD0428,FX,Director,10,1637633,Medium,14,0.7788,6
+TRD0429,Equities,Mid,19,968713,Low,23,0.7109,2
+TRD0430,FX,Senior,8,3283299,Low,27,0.3309,3
+TRD0431,Commodities,Mid,5,912280,Medium,27,0.7625,10
+TRD0432,Derivatives,Mid,14,3380624,Medium,3,0.8124,6
+TRD0433,Derivatives,Mid,5,852364,Medium,27,0.1543,4
+TRD0434,FX,Senior,9,2202060,Medium,4,0.5577,4
+TRD0435,Equities,Senior,12,4049565,Medium,17,0.2782,9
+TRD0436,Equities,Junior,14,1181795,Low,27,0.7048,3
+TRD0437,Equities,Director,16,3849757,Low,19,0.2345,2
+TRD0438,Fixed Income,Junior,17,3623438,Medium,28,0.6411,6
+TRD0439,Derivatives,Director,21,4518152,Low,10,0.2498,10
+TRD0440,Derivatives,Junior,3,885921,Low,10,0.4905,2
+TRD0441,FX,Mid,10,3589826,Low,10,0.9017,3
+TRD0442,Equities,Senior,2,4686514,Low,11,0.3684,5
+TRD0443,Derivatives,Junior,2,3826942,Low,20,0.8332,2
+TRD0444,Equities,Mid,6,980122,Low,14,0.9377,7
+TRD0445,Equities,Mid,15,4119698,Medium,22,0.8324,3
+TRD0446,Derivatives,Junior,22,581196,High,13,0.1659,2
+TRD0447,Commodities,Senior,19,2964779,Low,9,0.7805,3
+TRD0448,Derivatives,Director,16,2513356,High,6,0.0402,10
+TRD0449,Equities,Director,19,2678843,Low,16,0.3797,10
+TRD0450,Derivatives,Mid,5,2621770,High,27,0.8285,6
+TRD0451,Equities,Mid,21,205809,High,25,0.6574,5
+TRD0452,FX,Junior,22,2565554,Low,8,0.5108,9
+TRD0453,Derivatives,Junior,4,4686884,Medium,14,0.3746,2
+TRD0454,Equities,Junior,12,2211504,High,21,0.7736,7
+TRD0455,Equities,Director,21,1420719,High,18,0.677,7
+TRD0456,Equities,Director,12,4974333,High,2,0.4503,8
+TRD0457,Commodities,Senior,21,540012,Medium,18,0.8489,3
+TRD0458,Fixed Income,Mid,23,2457089,Low,2,0.2262,8
+TRD0459,Derivatives,Mid,12,2587359,Medium,4,0.1702,7
+TRD0460,Derivatives,Mid,3,2415835,Medium,19,0.6142,9
+TRD0461,Fixed Income,Mid,9,4612543,Medium,3,0.9237,2
+TRD0462,Equities,Mid,6,2137742,Low,10,0.2424,7
+TRD0463,Commodities,Junior,12,4867843,Medium,18,0.2447,9
+TRD0464,Equities,Junior,15,380787,Low,20,0.1411,3
+TRD0465,Fixed Income,Director,12,3682984,Medium,13,0.8189,8
+TRD0466,Derivatives,Mid,6,2985135,Low,3,0.2228,1
+TRD0467,Derivatives,Director,8,1240702,Medium,24,0.483,8
+TRD0468,Commodities,Junior,17,1178440,Medium,28,0.9414,7
+TRD0469,Equities,Mid,2,3612417,Low,26,0.0214,2
+TRD0470,Fixed Income,Junior,6,3206164,Medium,22,0.5331,1
+TRD0471,Fixed Income,Mid,22,3075291,Low,12,0.4916,8
+TRD0472,Fixed Income,Junior,4,301625,High,26,0.769,3
+TRD0473,Equities,Junior,11,3009521,Medium,15,0.344,5
+TRD0474,Equities,Director,6,4907866,Low,4,0.3957,1
+TRD0475,Equities,Mid,4,135749,Low,25,0.1679,10
+TRD0476,Equities,Senior,11,2371575,Low,10,0.7064,6
+TRD0477,Fixed Income,Mid,13,2497169,Low,28,0.7476,10
+TRD0478,Derivatives,Mid,6,4488939,High,11,0.1385,2
+TRD0479,Derivatives,Mid,3,1450087,Medium,26,0.3798,3
+TRD0480,Fixed Income,Junior,5,2404027,Low,16,0.8493,7
+TRD0481,Fixed Income,Director,16,3600100,High,14,0.0125,7
+TRD0482,Equities,Senior,21,348637,Low,9,0.2908,8
+TRD0483,Fixed Income,Senior,6,4015392,High,25,0.5317,10
+TRD0484,Equities,Mid,9,4119957,Low,2,0.324,9
+TRD0485,Equities,Junior,9,3612252,Medium,14,0.2657,2
+TRD0486,Fixed Income,Director,10,3258509,High,11,0.4424,4
+TRD0487,Fixed Income,Mid,7,3750674,Low,16,0.1806,10
+TRD0488,Equities,Junior,3,3919697,Medium,8,0.5078,6
+TRD0489,Fixed Income,Mid,14,4521805,High,20,0.6743,9
+TRD0490,Fixed Income,Senior,10,2169440,Low,12,0.5508,6
+TRD0491,Derivatives,Senior,9,2307478,Low,6,0.0975,1
+TRD0492,Derivatives,Senior,8,3207786,Medium,6,0.8037,5
+TRD0493,Derivatives,Senior,23,1005792,Low,21,0.1745,9
+TRD0494,Equities,Junior,16,4288333,Low,8,0.7289,7
+TRD0495,Derivatives,Director,11,3864041,Low,9,0.3489,2
+TRD0496,Fixed Income,Mid,6,3173773,Medium,19,0.7458,3
+TRD0497,Fixed Income,Senior,20,1543174,Low,10,0.2039,9
+TRD0498,Derivatives,Junior,22,1770984,Low,12,0.1855,10
+TRD0499,Fixed Income,Director,2,2203124,Medium,8,0.4772,8
+TRD0500,Fixed Income,Mid,23,3329521,Medium,11,0.041,1

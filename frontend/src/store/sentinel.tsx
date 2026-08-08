@@ -1,0 +1,267 @@
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import type {
+  Alert,
+  AuthUser,
+  BlockchainRecord,
+  Trade,
+  UserRole,
+} from "@/types/sentinel";
+import { BASE_TIME, makeRng, makeTxHash } from "@/data/mock";
+
+export interface TimelinePoint {
+  t: string;
+  detections: number;
+  critical: number;
+}
+
+interface SentinelState {
+  hydrated: boolean;
+  user: AuthUser | null;
+  login: (email: string, role: UserRole) => void;
+  logout: () => void;
+
+  live: boolean;
+  setLive: (v: boolean) => void;
+
+  trades: Trade[];
+  alerts: Alert[];
+  blockchain: BlockchainRecord[];
+  timeline: TimelinePoint[];
+  tradesMonitored: number;
+  autoAnchorThreshold: number;
+  setAutoAnchorThreshold: (v: number) => void;
+
+  anchorCase: (alert: Alert, reason?: string) => BlockchainRecord;
+  updateAlert: (id: string, patch: Partial<Alert>) => void;
+}
+
+const Ctx = createContext<SentinelState | null>(null);
+
+function seedTimeline(): TimelinePoint[] {
+  const rng = makeRng(4242);
+  return Array.from({ length: 16 }, (_, i) => {
+    const at = new Date(BASE_TIME - (16 - i) * 900_000);
+    return {
+      t: at.toISOString().slice(11, 16),
+      detections: 8 + Math.round(rng() * 26),
+      critical: 1 + Math.round(rng() * 7),
+    };
+  });
+}
+
+export function SentinelProvider({ children }: { children: ReactNode }) {
+  const [hydrated, setHydrated] = useState(false);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [live, setLive] = useState(true);
+  const [trades, setTrades] = useState<Trade[]>([]);
+  const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [blockchain, setBlockchain] = useState<BlockchainRecord[]>([]);
+  const [timeline, setTimeline] = useState<TimelinePoint[]>([]);
+  const [tradesMonitored, setTradesMonitored] = useState(1_284_930);
+  const [autoAnchorThreshold, setAutoAnchorThreshold] = useState(78);
+
+  const rng = useRef(makeRng(Date.now() % 100000)).current;
+  const counter = useRef(400);
+
+  useEffect(() => {
+    setHydrated(true);
+    try {
+      const raw = localStorage.getItem("sentinel-user");
+      if (raw) setUser(JSON.parse(raw) as AuthUser);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  const login = useCallback((email: string, role: UserRole) => {
+    const name = email.split("@")[0]?.replace(/[._]/g, " ") || "Analyst";
+    const u: AuthUser = {
+      email,
+      role,
+      name: name.replace(/\b\w/g, (c) => c.toUpperCase()),
+    };
+    setUser(u);
+    try {
+      localStorage.setItem("sentinel-user", JSON.stringify(u));
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  const logout = useCallback(() => {
+    setUser(null);
+    try {
+      localStorage.removeItem("sentinel-user");
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  const updateAlert = useCallback((id: string, patch: Partial<Alert>) => {
+    setAlerts((prev) => prev.map((a) => (a.alert_id === id ? { ...a, ...patch } : a)));
+  }, []);
+
+  const anchorCase = useCallback(
+    (alert: Alert, reason?: string) => {
+      const record: BlockchainRecord = {
+        tx_hash: makeTxHash(),
+        case_id: alert.case_id,
+        trader_id: alert.trader_id,
+        stock: alert.stock,
+        fraud_type: alert.fraud_type,
+        confidence: Math.round(alert.fraud_probability * 100),
+        timestamp: new Date().toISOString(),
+        anchored: true,
+        confirmed_by: user?.name ?? "SentinelAI Engine",
+        confirmed_role: user?.role ?? "System",
+        reason: reason ?? alert.reason,
+        block: 8_412_004 + blockchain.length,
+      };
+      setBlockchain((prev) => [record, ...prev]);
+      setAlerts((prev) =>
+        prev.map((a) =>
+          a.alert_id === alert.alert_id
+            ? { ...a, anchored: true, tx_hash: record.tx_hash, status: "Closed" }
+            : a,
+        ),
+      );
+      return record;
+    },
+    [blockchain.length, user],
+  );
+
+  // Real-time live feed from FastAPI backend
+  useEffect(() => {
+    if (!hydrated || !live) return;
+    
+    let ws: WebSocket;
+    let reconnectTimeout: ReturnType<typeof setTimeout>;
+
+    const connect = () => {
+      ws = new WebSocket("ws://localhost:8000/ws/live-feed");
+      
+      ws.onmessage = (event) => {
+        try {
+          const msg = JSON.parse(event.data);
+          if (msg.type === "trade" && msg.data) {
+            const raw = msg.data;
+            
+            const trade: Trade = {
+              trade_id: raw.trade_id || `TRD-${Date.now()}`,
+              trader_id: raw.trader_id || "Unknown",
+              company: raw.company || raw.ticker || "Unknown",
+              symbol: raw.ticker || "UNK",
+              trade_type: raw.action === "SELL" ? "SELL" : "BUY",
+              quantity: raw.quantity || 0,
+              price: raw.price || 0,
+              timestamp: raw.trade_timestamp ? new Date(raw.trade_timestamp).toISOString() : new Date().toISOString(),
+            };
+            
+            setTrades((prev) => [trade, ...prev].slice(0, 40));
+            setTradesMonitored((n) => n + 1);
+            
+            if (raw.is_flagged || (raw.risk_score && raw.risk_score >= 40)) {
+              const alert: Alert = {
+                alert_id: `ALT-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+                case_id: `INV-${new Date().getFullYear()}-${Math.floor(Math.random() * 1000).toString().padStart(3, "0")}`,
+                trader_id: trade.trader_id,
+                stock: trade.symbol,
+                company: trade.company,
+                risk_score: raw.risk_score || 0,
+                severity: (raw.severity as Severity) || severityFor(raw.risk_score || 0),
+                status: "Pending",
+                fraud_type: raw.fraud_probability > 0.8 ? "Insider Trading" : "Market Manipulation",
+                fraud_probability: raw.fraud_probability || 0,
+                anomaly_score: raw.anomaly_score || 0,
+                created_at: new Date().toISOString(),
+                assigned_to: "Unassigned",
+                reason: `ML model flagged trade with ${(raw.fraud_probability * 100).toFixed(1)}% probability. Risk score: ${raw.risk_score}.`,
+                top_reasons: [],
+              };
+              setAlerts((prev) => [alert, ...prev].slice(0, 80));
+              
+              setTimeline((prev) => {
+                const next = [
+                  ...prev,
+                  {
+                    t: new Date().toISOString().slice(11, 16),
+                    detections: prev.length > 0 ? prev[prev.length - 1].detections + 1 : 1,
+                    critical: prev.length > 0 ? prev[prev.length - 1].critical + (alert.severity === "Critical" ? 1 : 0) : 0,
+                  },
+                ];
+                return next.slice(-22);
+              });
+            }
+          }
+        } catch (err) {
+          console.error("Error parsing WebSocket message:", err);
+        }
+      };
+
+      ws.onclose = () => {
+        if (live) {
+          reconnectTimeout = setTimeout(connect, 3000);
+        }
+      };
+    };
+    
+    connect();
+
+    return () => {
+      clearTimeout(reconnectTimeout);
+      if (ws) ws.close();
+    };
+  }, [hydrated, live]);
+
+  const value = useMemo<SentinelState>(
+    () => ({
+      hydrated,
+      user,
+      login,
+      logout,
+      live,
+      setLive,
+      trades,
+      alerts,
+      blockchain,
+      timeline,
+      tradesMonitored,
+      autoAnchorThreshold,
+      setAutoAnchorThreshold,
+      anchorCase,
+      updateAlert,
+    }),
+    [
+      hydrated,
+      user,
+      login,
+      logout,
+      live,
+      trades,
+      alerts,
+      blockchain,
+      timeline,
+      tradesMonitored,
+      autoAnchorThreshold,
+      anchorCase,
+      updateAlert,
+    ],
+  );
+
+  return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
+}
+
+export function useSentinel() {
+  const ctx = useContext(Ctx);
+  if (!ctx) throw new Error("useSentinel must be used inside SentinelProvider");
+  return ctx;
+}

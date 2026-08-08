@@ -1,0 +1,219 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------------------------------------------
+ * SentinelAI — enterprise surveillance terminal theme.
+ * Bloomberg/Palantir inflected: near-black navy canvas, slate cards,
+ * cyan/blue accent, saturated severity ramp.
+ * --------------------------------------------------------------- */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+
+  --font-sans: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+
+  --color-surface: var(--surface);
+  --color-elevated: var(--elevated);
+  --color-cyan: var(--cyan);
+  --color-critical: var(--critical);
+  --color-high: var(--high);
+  --color-medium: var(--medium);
+  --color-low: var(--low);
+
+  --color-chart-1: var(--critical);
+  --color-chart-2: var(--high);
+  --color-chart-3: var(--medium);
+  --color-chart-4: var(--low);
+  --color-chart-5: var(--cyan);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--primary);
+  --color-sidebar-primary-foreground: var(--primary-foreground);
+  --color-sidebar-accent: var(--elevated);
+  --color-sidebar-accent-foreground: var(--foreground);
+  --color-sidebar-border: var(--border);
+  --color-sidebar-ring: var(--ring);
+}
+
+:root,
+.dark {
+  --radius: 0.5rem;
+
+  --background: oklch(0.155 0.018 265);
+  --surface: oklch(0.208 0.021 264);
+  --elevated: oklch(0.246 0.024 264);
+  --foreground: oklch(0.96 0.006 250);
+
+  --card: oklch(0.208 0.021 264);
+  --card-foreground: oklch(0.96 0.006 250);
+  --popover: oklch(0.208 0.021 264);
+  --popover-foreground: oklch(0.96 0.006 250);
+
+  --primary: oklch(0.68 0.16 240);
+  --primary-foreground: oklch(0.14 0.02 265);
+  --cyan: oklch(0.82 0.13 200);
+
+  --secondary: oklch(0.246 0.024 264);
+  --secondary-foreground: oklch(0.93 0.006 250);
+  --muted: oklch(0.246 0.024 264);
+  --muted-foreground: oklch(0.68 0.017 258);
+  --accent: oklch(0.28 0.03 250);
+  --accent-foreground: oklch(0.96 0.006 250);
+
+  --destructive: oklch(0.62 0.21 25);
+  --destructive-foreground: oklch(0.98 0.005 250);
+
+  --border: oklch(0.98 0.01 250 / 10%);
+  --input: oklch(0.98 0.01 250 / 14%);
+  --ring: oklch(0.68 0.16 240 / 60%);
+
+  --critical: oklch(0.63 0.22 26);
+  --high: oklch(0.73 0.17 58);
+  --medium: oklch(0.83 0.15 92);
+  --low: oklch(0.75 0.16 155);
+
+  --sidebar: oklch(0.178 0.019 265);
+  --sidebar-foreground: oklch(0.9 0.008 250);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  .font-mono,
+  [class*="tabular"] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--elevated);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@utility grid-backdrop {
+  background-image:
+    linear-gradient(to right, color-mix(in oklch, var(--cyan) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklch, var(--cyan) 8%, transparent) 1px, transparent 1px);
+  background-size: 46px 46px;
+}
+
+@utility panel {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+@layer base {
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .rise {
+    animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation-delay: var(--rise-delay, 0s);
+  }
+
+  @keyframes flash-in {
+    from {
+      background-color: color-mix(in oklch, var(--cyan) 22%, transparent);
+    }
+    to {
+      background-color: transparent;
+    }
+  }
+  .flash-in {
+    animation: flash-in 1.4s ease-out;
+  }
+
+  @keyframes pulse-ring {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in oklch, currentColor 55%, transparent);
+    }
+    70% {
+      box-shadow: 0 0 0 7px transparent;
+    }
+    100% {
+      box-shadow: 0 0 0 0 transparent;
+    }
+  }
+  .pulse-dot {
+    animation: pulse-ring 2s infinite;
+  }
+
+  @keyframes ticker {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  .ticker-track {
+    animation: ticker 38s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rise,
+    .flash-in,
+    .pulse-dot,
+    .ticker-track {
+      animation: none;
+    }
+  }
+}
