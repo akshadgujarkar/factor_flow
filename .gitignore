@@ -1,0 +1,71 @@
+# ==========================================
+# FactorFlow Root GitIgnore Configuration
+# ==========================================
+
+# Dependencies
+node_modules/
+**/node_modules/
+.pnp
+.pnp.js
+bun.lockb
+
+# Frontend Build & Output Directories
+frontend/dist/
+frontend/build/
+frontend/.output/
+frontend/.tanstack/
+frontend/.vite/
+frontend/.nitro/
+frontend/.cache/
+frontend/.lovable/
+
+# Hardhat Build Artifacts & Caches
+hardhat/artifacts/
+hardhat/cache/
+hardhat/typechain/
+hardhat/typechain-types/
+hardhat/coverage/
+hardhat/coverage.json
+hardhat/.solcover.js
+hardhat/gasReporterOutput.txt
+
+# Python Virtual Environments & Bytecode
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment Variables & API Keys
+.env
+.env.*
+!.env.example
+*.env
+
+# IDE & Editor Files
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs & Temporary Files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
