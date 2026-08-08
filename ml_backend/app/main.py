@@ -18,7 +18,7 @@ import asyncio
 
 from app.core.config import settings
 from app.core.model_loader import ModelLoader
-from app.routers import trades, stats, websocket
+from app.routers import trades, stats, websocket, data_sources
 
 # ─────────────────────────────────────────────────
 #  LIFESPAN  (startup / shutdown)
@@ -54,9 +54,10 @@ app.add_middleware(
 # ─────────────────────────────────────────────────
 #  ROUTERS
 # ─────────────────────────────────────────────────
-app.include_router(trades.router,    prefix="/api", tags=["Trades"])
-app.include_router(stats.router,     prefix="/api", tags=["Stats"])
-app.include_router(websocket.router, tags=["WebSocket"])
+app.include_router(trades.router,        prefix="/api", tags=["Trades"])
+app.include_router(stats.router,         prefix="/api", tags=["Stats"])
+app.include_router(data_sources.router,  prefix="/api", tags=["Data Sources"])
+app.include_router(websocket.router,     tags=["WebSocket"])
 
 
 @app.get("/", tags=["Health"])

@@ -7,6 +7,7 @@ with full trade context + risk scores.
 import asyncio
 import json
 import random
+import time
 from pathlib import Path
 from typing import Set
 
@@ -17,6 +18,17 @@ from app.core.config import settings
 from app.services.predictor import predict_batch
 
 router = APIRouter()
+
+# ─────────────────────────────────────────────────────
+#  Live feed counters — read by /api/data-sources
+# ─────────────────────────────────────────────────────
+feed_counters: dict = {
+    "trades_sent": 0,
+    "bytes_sent": 0,
+    "active_connections": 0,
+    "start_time": time.time(),
+    "last_trade_ts": None,
+}
 
 # ─────────────────────────────────────────────────────
 #  Load demo trades (done once at import time)
@@ -40,6 +52,7 @@ def _get_demo_trades() -> pd.DataFrame:
 _active_connections: Set[WebSocket] = set()
 
 
+
 @router.websocket("/ws/live-feed")
 async def live_feed(websocket: WebSocket):
     """
@@ -51,6 +64,7 @@ async def live_feed(websocket: WebSocket):
     """
     await websocket.accept()
     _active_connections.add(websocket)
+    feed_counters["active_connections"] = len(_active_connections)
 
     df = _get_demo_trades()
     trade_records = df.to_dict(orient="records")
@@ -78,7 +92,12 @@ async def live_feed(websocket: WebSocket):
                             int(v)  if isinstance(v, (int, float)) and str(v) in ("True","False") else
                             v)
                        for k, v in pred.items()}
-                await websocket.send_json({"type": "trade", "data": msg})
+                payload = {"type": "trade", "data": msg}
+                await websocket.send_json(payload)
+                # Update live counters
+                feed_counters["trades_sent"] += 1
+                feed_counters["bytes_sent"] += len(json.dumps(payload))
+                feed_counters["last_trade_ts"] = time.time()
                 await asyncio.sleep(settings.WS_INTERVAL)
 
         # End of stream
@@ -88,3 +107,4 @@ async def live_feed(websocket: WebSocket):
         pass
     finally:
         _active_connections.discard(websocket)
+        feed_counters["active_connections"] = len(_active_connections)

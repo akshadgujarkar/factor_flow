@@ -91,6 +91,10 @@ export interface DataSource {
   fields: string[];
   throughput: string;
   latency: string;
+  /** Real row count from the backing CSV file */
+  record_count?: number;
+  /** ISO-8601 UTC timestamp of last file modification */
+  last_updated?: string;
 }
 
 export interface TimelineEvent {
